@@ -2,63 +2,112 @@ const request = require('request')
 const process = require('process')
 
 const command = process.argv[2]
+const baseUrl = 'https://lidemy-book-store.herokuapp.com'
+if (command === 'list') {
+  listBook(20)
+} else if (command === 'read') {
+  readBook(process.argv[3])
+} else if (command === 'delete') {
+  deleteBook(process.argv[3])
+} else if (command === 'create') {
+  createBook(process.argv[3])
+} else if (command === 'update') {
+  updateBook(process.argv[3], process.argv[4])
+} else {
+  console.log('你的指令輸入錯誤')
+}
 
-switch (command) {
-  case 'list':
-    // node hw2.js list // 印出前二十本書的 id 與書名
-    request(
-      'https://lidemy-book-store.herokuapp.com/books?_limit=20',
-      (error, response, body) => {
-        const data = JSON.parse(body)
-        for (let i = 0; i <= 19; i++) {
-          console.log(`${data[i].id} ${data[i].name}`)
-        }
+function listBook(bookCounts) {
+  request(`${baseUrl}/books?_limit=${bookCounts}`,
+    (error, response, body) => {
+      if (response.statusCode >= 500) { // 處理錯誤 5XX 的情況
+        console.log('error', error)
+        return
+      } else if (response.statusCode >= 400) { // 處理錯誤 4XX 的情況
+        console.log('error', error)
+        return
       }
-    )
-    break
-
-  case 'read':
-    // node hw2.js read 1 // 輸出 id 為 1 的書籍
-    request(
-      `https://lidemy-book-store.herokuapp.com/books/${process.argv[3]}`,
-      (error, response, body) => {
-        const data = JSON.parse(body)
-        console.log(data.name)
+      // 針對來自外部的文件做小心處理(如果文件本不是 JSON 字串就會有問題)
+      let books
+      try {
+        books = JSON.parse(body)
+      } catch (exception) {
+        console.log(exception)
       }
-    )
-    break
-
-  case 'delete':
-    // node hw2.js delete 1 // 刪除 id 為 1 的書籍
-    request.delete(
-      `https://lidemy-book-store.herokuapp.com/books/${process.argv[3]}`,
-      console.log(`為您刪除 ID 為 ${process.argv[3]} 的書籍成功！`)
-    )
-    break
-
-  case 'create':
-    // node hw2.js create "I love coding" // 新增一本名為 I love coding 的書
-    request.post({
-      url: 'https://lidemy-book-store.herokuapp.com/books/',
-      form: {
-        id: process.argv[4],
-        name: process.argv[3]
+      for (let i = 0; i < books.length; i++) {
+        console.log(`${books[i].id} ${books[i].name}`)
       }
-    },
-    console.log(`為您新增 ${process.argv[3]} 書籍成功！此書籍 ID 為：${process.argv[4]}`)
-    )
-    break
+    })
+}
 
-  case 'update':
-    // node hw2.js update 1 "new name" // 更新 id 為 1 的書名為 new name
-    request.patch({
-      url: `https://lidemy-book-store.herokuapp.com/books/${process.argv[3]}`,
-      form: {
-        id: process.argv[3],
-        name: process.argv[4]
+function readBook(bookID) {
+  request(`${baseUrl}/books/${bookID}`,
+    (error, response, body) => {
+      if (response.statusCode >= 500) { // 處理錯誤 5XX 的情況
+        console.log('error', error)
+        return
+      } else if (response.statusCode >= 400) { // 處理錯誤 4XX 的情況
+        console.log('error', error)
+        return
       }
-    },
-    console.log(`已將 id 為 ${process.argv[3]} 的書名更新為 ${process.argv[4]}！`)
-    )
-    break
+      let books
+      try {
+        books = JSON.parse(body)
+      } catch (exception) {
+        console.log(exception)
+      }
+      console.log(books.name)
+    })
+}
+
+function deleteBook(bookID) {
+  request.delete(`${baseUrl}/books/${bookID}`,
+    (error, response, body) => {
+      if (response.statusCode >= 500) { // 處理錯誤 5XX 的情況
+        console.log('error', error)
+        return
+      } else if (response.statusCode >= 400) { // 處理錯誤 4XX 的情況
+        console.log('error', error)
+        return
+      }
+      console.log(`刪除ID為${bookID}的書籍成功！`)
+    })
+}
+
+function createBook(bookName) {
+  request.post({
+    url: `${baseUrl}/books`,
+    form: {
+      name: bookName
+    }
+  },
+  (error, response, body) => {
+    if (response.statusCode >= 500) { // 處理錯誤 5XX 的情況
+      console.log('error', error)
+      return
+    } else if (response.statusCode >= 400) { // 處理錯誤 4XX 的情況
+      console.log('error', error)
+      return
+    }
+    console.log(`為您新增書名為${bookName}的書籍成功`)
+  })
+}
+
+function updateBook(bookID, bookName) {
+  request.patch({
+    url: `${baseUrl}/books/${bookID}`,
+    form: {
+      name: bookName
+    }
+  },
+  (error, response, body) => {
+    if (response.statusCode >= 500) { // 處理錯誤 5XX 的情況
+      console.log('error', error)
+      return
+    } else if (response.statusCode >= 400) { // 處理錯誤 4XX 的情況
+      console.log('error', error)
+      return
+    }
+    console.log(`為您修改ID為${bookID}的書籍名稱至${bookName}成功！`)
+  })
 }

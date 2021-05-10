@@ -9,10 +9,25 @@ request(
     }
   },
   (error, response, body) => {
-    const data = JSON.parse(body)
-    for (let i = 0; i <= 9; i++) {
-      const viewersData = data.top[i].viewers
-      const gameName = data.top[i].game.name
+    if (response.statusCode >= 500) { // 處理錯誤 5XX 的情況
+      console.log('error', error)
+      return
+    } else if (response.statusCode >= 400) { // 處理錯誤 4XX 的情況
+      console.log('error', error)
+      return
+    }
+    let gameData
+    try {
+      gameData = JSON.parse(body)
+    } catch (exception) {
+      console.log(exception)
+    }
+    const topGames = gameData.top
+    let viewersData
+    let gameName
+    for (let i = 0; i < topGames.length; i++) {
+      viewersData = topGames[i].viewers
+      gameName = topGames[i].game.name
       console.log(`${viewersData} ${gameName}`)
     }
   }

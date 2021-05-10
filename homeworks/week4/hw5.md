@@ -48,36 +48,38 @@ API 的 endpoint：
 `GET` https://api.jiababa.hazel
 
 ##### (一) 回傳所有餐廳資料
-`GET` /list
+`GET` /restaurants
 | 參數          | 說明                                   | 範例    |
 | ------------- | -------------------------------------- | --- |
-| limit         | 限制最多回傳的資料，預設為回傳全部筆數      | list?limit=10     |
+| limit         | 限制最多回傳的資料，預設為回傳全部筆數      | /restaurants?limit=10     |
 
 ##### (二) 回傳單一餐廳資料
-`GET` /list/id
+`GET` /restaurants/id
 | 參數 | 說明 | 範例     |
 | ---- | ---- | -------- |
-| 無   | 回傳 id 為 17 的餐廳資料   | /list/17 |
+| 無   | 回傳 id 為 17 的餐廳資料   | /restaurants/17 |
 
 ##### (三) 刪除餐廳 
-`DELETE` /list/id
+`DELETE` /restaurants/id
 | 參數 | 說明 | 範例     |
 | ---- | ---- | -------- |
-| Authorization | 透過您的 Client ID 取得授權，刪除 id 為 17 的餐廳資料          |list/17?client_ID=9487     |
+| 無 | 透過您的 Client ID 取得授權，刪除 id 為 17 的餐廳資料          |/restaurants/17     |
+＊您可以於「Request header (Client-ID: XXXXX)」夾帶您的 Client ID，以讓系統授權給您進行刪除動作
 
 ##### (四) 新增餐廳 
-`POST` /list/id
+`POST` /restaurants
 | 參數 | 說明 | 範例     |
 | ---- | ---- | -------- |
-| Authorization | 你的 Client ID                         |list/88?client_ID=9487     |
-| name | 欲新增的餐廳名稱                       |list/88?client_ID=9487&name=Steak_over_full     |
+| 無 | 透過您的 Client ID 取得授權，新增一筆新餐廳資料          |/restaurants    |
+＊您可以於「Request header (Client-ID: XXXXX)」夾帶您的 Client ID，與「Request body」夾帶新餐廳的名稱(name: XXXX)，以讓系統授權給您進行新增動作
+
 
 ##### (五) 更改餐廳 
-`PATCH` /list/id
+`PATCH` /restaurants/id
 | 參數 | 說明 | 範例     |
 | ---- | ---- | -------- |
-| Authorization | 你的 Client ID                         |list/17?client_ID=9487     |
-| name | 欲修改成的餐廳名稱                       |list/88?client_ID=9487&name=I_am_over_full     |
+| 無 | 透過您的 Client ID 取得授權，對 id 為 17 的餐廳資料進行更改          |/restaurants/17    |
+＊您可以於「Request header (Client-ID: XXXXX)」夾帶您的 Client ID，與「Request body」夾帶餐廳的新名稱(name: XXXX)，以讓系統授權給您進行更改動作
 
 
 #### 四、我們給您的 Response：
