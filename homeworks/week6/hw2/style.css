@@ -79,7 +79,7 @@ input, button {
   font-family: MicrosoftJhengHei;
 }
 
-.sign-up-type {
+.form__question__sign-up-type {
   display: flex;
   flex-direction:column;
 }
@@ -95,7 +95,7 @@ input[type="radio"] + label {
   margin-left: 2px;
 }
 
-.advice-for-activity {
+.advice {
   font-family: MicrosoftJhengHei;
   font-size: 12px;
   margin-top: 5px;
