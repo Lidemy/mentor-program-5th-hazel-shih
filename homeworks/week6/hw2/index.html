@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <title>新拖延運動報名表單</title>
+</head>
+<body>
+  <div class="big-wrapper">
+    <div class="yellow-bar"></div>
+    <div class="wrapper">
+      <section class="form__info">
+        <h1 class="form__info__title">新拖延運動報名表單</h1>
+        <div class="form__info__date-time">
+            <div>活動日期：2020/12/10 ~ 2020/12/11</div>
+            <div>活動地點：台北市大安區新生南路二段1號</div>
+        </div>
+        <div class="form__info__must-write">* 必填</div>
+      </section>
+  
+      <section class="form__question">
+        <div class="form__question__short-answer">
+          <h2 class="question required">暱稱</h2>
+          <input class="answer" type="text" placeholder="您的回答" onfocus="this.placeholder=''" onblur="this.placeholder='您的回答'" name="name">
+        </div>
+        <div class="form__question__short-answer">
+          <h2 class="question required">電子郵件</h2>
+          <input class="answer" type="email" placeholder="您的電子郵件" onfocus="this.placeholder=''" onblur="this.placeholder='您的電子郵件'" name="email">
+        </div>
+        <div class="form__question__short-answer">
+          <h2 class="question required">手機號碼</h2>
+          <input class="answer" type="text" placeholder="您的手機號碼" onfocus="this.placeholder=''" onblur="this.placeholder='您的手機號碼'" name="phoneNum">
+        </div>
+        <div class="form__question__short-answer sign-up-type">
+          <h2 class="question required">報名類型</h2>
+          <div class="sign-up-type__text"><input type="radio" name="sign-up-type" id="lie-bed"><label for="lie-bed">躺在床上用想像力實作</label></div>
+          <div class="sign-up-type__text"><input type="radio" name="sign-up-type" id="lie-floor"><label for="lie-floor">趴在地上滑手機找現成的</label></div>
+        </div>
+        <div class="form__question__short-answer">
+          <h2 class="question required">怎麼知道這個活動的？</h2>
+          <input class="answer" type="text" placeholder="您的回答" onfocus="this.placeholder=''" onblur="this.placeholder='您的回答'" name="how-to-know">
+        </div>
+        <div class="form__question__short-answer">
+          <h2 class="question">其他</h2>
+          <p class="advice-for-activity">對活動的一些建議</p>
+          <input class="answer" type="text" placeholder="您的回答" onfocus="this.placeholder=''" onblur="this.placeholder='您的回答'" name="advice">
+        </div>
+        <div>
+          <input class="button" type="submit" value="提交">
+        </div>
+        <div class="alert">請勿透過表單送出您的密碼。</div>
+      </section>
+    </div>
+  </div>
+  <footer class="footer">© 2020 © Copyright. All rights Reserved.</footer>
+</body>
+</html>
