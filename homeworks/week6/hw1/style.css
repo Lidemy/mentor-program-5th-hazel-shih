@@ -1,0 +1,373 @@
+html {
+  font-size: 12px;
+}
+
+html, body, h1, h2, p {
+  margin: 0px;
+  padding: 0px;
+}
+
+.navbar {
+  box-shadow: -1.4px -1.4px 6px 0 #97a2a0;
+}
+
+.navbar .wrapper {
+  display: flex; /* 左右排列用 flex */
+  background: white;
+  justify-content: space-between;  /* 將兩元素往左右兩邊推開 */
+  align-items: center;
+  height: 84px;
+  max-width: 1280px;
+  margin: 0 auto;  /* div 內的元素置中 */
+  padding: 0 20px;
+}
+
+.nav__site-name {
+  color: #489846;
+  font-family: Questrial;
+  font-size: 36px;
+}
+
+.nav__list {
+  display: flex;
+  list-style: none; /* 不要前面的點 */
+  margin: 0; /* list 有預設的 margin 和 padding */
+  padding: 0;
+  font-size: 18px;
+  font-family: MicrosoftJhengHei;
+}
+
+.nav__list li {
+  margin-left: 12px;
+  border-radius: 8px;
+}
+
+.nav__list li.active ,
+.nav__list li:hover {
+  background: #ff7286;
+  transition: background 0.1s;
+}
+
+.nav__list li a {  /* 把 padding 移到 a 會讓整個按鈕變大變好按 */
+  text-decoration: none;
+  color: black;
+  display: block;
+  padding: 12px 24px;
+  font-size: 18px;
+}
+
+.nav__list li.active a ,
+.nav__list li:hover a {
+  color: white;
+}
+
+.banner {
+  background: url("./2.jpg") center/cover no-repeat;
+  height: 420px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.banner:after {
+  content: "";
+  position: absolute;
+  background: rgba(0, 0, 0, 0.3);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.banner h1 {
+  margin: 0;
+  color: white;
+  font-family: MicrosoftJhengHei;
+  font-size: 45px;
+  z-index: 1;
+}
+
+h2 {
+  margin: 0;
+}
+
+.wrapper {
+  padding: 0 96px;
+}
+
+.section {
+  text-align: center;
+}
+
+.section__title {
+  font-family: MicrosoftJhengHei;
+  font-size: 36px;
+  font-weight: bold;
+  border-left: solid 15px #a3deaa;
+  display: inline-block;
+  margin-top: 80px;
+  margin-bottom: 36px;
+  padding-left: 16px;
+}
+
+.section__content {
+  font-family: MicrosoftJhengHei;
+  font-size: 14.5px;
+  line-height: 2em;
+  margin: 0px 0 84px 0;
+}
+
+.button {
+  padding: 60px 80px;
+  color: #3e613d;
+  font-family: MicrosoftJhengHei;
+  font-size: 36px;
+  font-weight: bold;
+  display: inline-block;
+  border-radius: 10px;
+  transition: transform 0.1s;
+  cursor: pointer;
+  margin-bottom: 40px;
+}
+
+.button:hover {
+  transform: scale(1.1);
+}
+
+.btn-order {
+  background: #a8e8e1;
+  margin-right: 23px;
+}
+
+.btn-query {
+  background: #f9f9b5;
+}
+
+.section__images img {
+  display: block;
+}
+
+.section__images {
+  display: flex;
+}
+
+.section__images div {
+  width: 25%;
+}
+
+.section__images img {
+  width: 100%;
+}
+
+.reviews {
+  display: flex;
+  column-gap: 16px;
+  margin-top: 98px;
+}
+
+.review {
+  box-sizing: border-box;
+  width: 565px;
+  min-height: 205px;
+  padding: 0 25px;
+  border-radius: 5px;
+  border: solid 1px #c7e5ec;
+  position: relative;
+}
+
+.rev__pic {
+  position: absolute;
+  transform: translate(-50%, -52%);
+}
+
+.rev__name {
+  margin-top: 55px;
+}
+
+.rev__content {
+  margin-top: 23px;
+  text-align: center;
+  font-family: MicrosoftJhengHei;
+  font-size: 13px;
+  line-height: 1.7em;
+  letter-spacing: 0.14px;
+}
+
+.map {
+  margin-bottom: 43px;
+}
+
+.footer__top {
+  background: #e8efee;
+}
+
+.footer__info {
+  margin-right: 10px;
+}
+
+.footer__info-text {
+  color: #484848;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.footer__info-text:first-child {
+  margin-top: 44px;
+}
+
+.footer__info-text:nth-child(4) {
+  margin-bottom: 39px;
+}
+
+
+.footer__top .wrapper {
+  padding: 0px 96px;
+  color: #484848;
+  display: flex;
+  justify-content: space-between;
+}
+.footer__bottom {
+  background: #35564b;
+  padding: 12px 0;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+}
+
+.footer__site-name {
+  color: #489846;
+  font-family: Questrial;
+  font-size: 36px;
+  margin-top: 35px;
+  text-align: right;
+}
+
+.footer__site-media {
+  font-family: Questrial;
+  font-size: 14px;
+  color: #484848;
+  margin-top: 15px;
+}
+
+
+@media(max-width: 768px) {
+  .navbar .wrapper {
+    flex-direction: column;
+    justify-content: space-between;
+    height: 120px;
+    padding: 0;
+  }
+  .nav__list {
+    display: flex;
+    width: 100%;
+  }
+  .nav__list li {
+    flex: 1;
+    margin-left: 0;
+    border-radius: 0;
+    text-align: center;
+  }
+  .nav__list li.active{
+    flex: 1;
+  }
+  .nav__site-name {
+    margin-top: 12px;
+  }
+  .btn-order {
+    margin-right: 0;
+  }
+  .btn-query {
+    margin-top: 16px;
+  }
+  .section__images {
+    flex-direction: column;
+  }
+  .section__images div {
+    width: 100%;
+  }
+  .reviews {
+    flex-direction: column;
+    row-gap: 75px;
+  }
+  .review {
+    width: 100%;
+  }
+  .footer__site-name {
+    text-align: left;
+  }
+  .footer__top .wrapper {
+    flex-direction: column-reverse;
+  }
+  .footer__info-text:first-child {
+    margin-top: 25px;
+  }
+  .footer__site-media {
+    margin-top: 3px;
+  }
+  .footer__bottom {
+    padding: 10px;
+  }
+}
+
+@media(max-width: 480px) {
+  .wrapper {
+    padding: 0 70px;
+  }
+  .navbar .wrapper {
+    flex-direction: column;
+    justify-content: space-between;
+    height: 140px;
+    padding: 0;
+  }
+  .nav__list {
+    display: flex;
+    width: 100%;
+  }
+  .nav__list li {
+    flex: 1;
+    margin-left: 0;
+    border-radius: 0;
+    text-align: center;
+  }
+  .nav__list li.active{
+    flex: 1;
+  }
+  .nav__site-name {
+    margin-top: 12px;
+  }
+  .btn-order {
+    margin-right: 0;
+  }
+  .btn-query {
+    margin-top: 16px;
+  }
+  .section__images {
+    flex-direction: column;
+  }
+  .section__images div {
+    width: 100%;
+  }
+  .reviews {
+    flex-direction: column;
+    row-gap: 90px;
+  }
+  .review {
+    width: 100%;
+  }
+  .footer__site-name {
+    text-align: left;
+  }
+  .footer__top .wrapper {
+    flex-direction: column-reverse;
+  }
+  .footer__info-text:first-child {
+    margin-top: 25px;
+  }
+  .footer__site-media {
+    margin-top: 3px;
+  }
+  .footer__bottom {
+    padding: 10px;
+  }
+}
