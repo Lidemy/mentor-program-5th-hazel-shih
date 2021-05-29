@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <title>新拖延運動報名表單</title>
+</head>
+<body>
+  <div class="big-wrapper">
+    <div class="yellow-bar"></div>
+    <div class="wrapper">
+      <section class="form__info">
+        <h1 class="form__info__title">新拖延運動報名表單</h1>
+        <div class="form__info__date-time">
+            <div>活動日期：2020/12/10 ~ 2020/12/11</div>
+            <div>活動地點：台北市大安區新生南路二段1號</div>
+        </div>
+        <div class="form__info__must-write">* 必填</div>
+      </section>
+  
+      <section class="form__question">
+        <div class="form__question__short-answer">
+          <h2 class="question required">暱稱</h2>
+          <input class="answer should-check__text" type="text" placeholder="您的回答" onfocus="this.placeholder=''" onblur="this.placeholder='您的回答'" name="name">
+          <div class="should-check__alert hide"><img src="./warn.png">這是必填問題</div>
+        </div>
+        <div class="form__question__short-answer">
+          <h2 class="question required">電子郵件</h2>
+          <input class="answer should-check__text" type="email" placeholder="您的電子郵件" onfocus="this.placeholder=''" onblur="this.placeholder='您的電子郵件'" name="email">
+          <div class="should-check__alert hide"><img src="./warn.png">這是必填問題</div>
+        </div>
+        <div class="form__question__short-answer">
+          <h2 class="question required">手機號碼</h2>
+          <input class="answer should-check__text" type="text" placeholder="您的手機號碼" onfocus="this.placeholder=''" onblur="this.placeholder='您的手機號碼'" name="phoneNum">
+          <div class="should-check__alert hide"><img src="./warn.png">這是必填問題</div>
+        </div>
+        <div class="form__question__sign-up-type">
+          <h2 class="question required">報名類型</h2>
+          <div class="sign-up-type__text"><input class="should-check__radio" type="radio" name="sign-up-type" id="lie-bed"><label class="sign-up-type__label" for="lie-bed">躺在床上用想像力實作</label></div>
+          <div class="sign-up-type__text"><input class="should-check__radio" type="radio" name="sign-up-type" id="lie-floor"><label class="sign-up-type__label" for="lie-floor">趴在地上滑手機找現成的</label></div>
+          <div class="should-radio__alert hide"><img src="./warn.png">這是必填問題</div>
+        </div>
+        <div class="form__question__short-answer">
+          <h2 class="question required">怎麼知道這個活動的？</h2>
+          <input class="answer should-check__text" type="text" placeholder="您的回答" onfocus="this.placeholder=''" onblur="this.placeholder='您的回答'" name="how-to-know">
+          <div class="should-check__alert hide"><img src="./warn.png">這是必填問題</div>
+        </div>
+        <div class="form__question__short-answer">
+          <h2 class="question">其他</h2>
+          <p class="advice">對活動的一些建議</p>
+          <input class="answer" type="text" placeholder="您的回答" onfocus="this.placeholder=''" onblur="this.placeholder='您的回答'" name="advice">
+        </div>
+        <div>
+          <input class="button" type="submit" value="提交">
+        </div>
+        <div class="alert">請勿透過表單送出您的密碼。</div>
+      </section>
+    </div>
+  </div>
+  <footer class="footer">© 2020 © Copyright. All rights Reserved.</footer>
+
+
+  <script>
+  document.querySelector('.button').addEventListener('click', (e) => {
+    //簡答題處理
+    let checkListText = document.querySelectorAll('.should-check__text') 
+    let textAlert = document.querySelectorAll('.should-check__alert')
+    let checkText = true
+    for(let i = 0; i < checkListText.length; i++){
+      if(checkListText[i].value.length === 0){
+        textAlert[i].classList.remove('hide')
+        checkListText[i].classList.add('text-answer__alert')
+        checkText = false
+      }
+    }
+    //單選題處理
+    let checkListRadio = document.querySelectorAll('.should-check__radio') 
+    let radioAlert = document.querySelector('.should-radio__alert')
+    let checkRadio = true
+    if(checkListRadio[0].checked || checkListRadio[1].checked) {
+      radioAlert.classList.add('hide')
+    } else {
+      radioAlert.classList.remove('hide')
+      checkRadio = false
+    }
+    //送出表單與否驗證
+    if(checkText && checkRadio) { 
+      //處理 radio 的填答預覽
+      let label = document.querySelectorAll('.sign-up-type__label')
+      let radioPreview
+      if(checkListRadio[0].checked){
+        radioPreview = label[0].innerText
+      } else {
+        radioPreview = label[1].innerText
+      }
+      //處理 alert 預覽訊息
+      let answers = document.querySelectorAll('.answer')
+      let alertMessage = 
+      `      暱稱：${answers[0].value}\n
+      電子郵件：${answers[1].value}\n
+      手機號碼：${answers[2].value}\n
+      報名類型：${radioPreview}\n
+      怎麼知道這個活動的：${answers[3].value}\n
+      其他：${answers[4].value}\n`
+      
+      alert(alertMessage)
+    } else {
+      e.preventDefault()
+    }
+  })
+  //當 user 填寫時，處理簡答題的警告文字使其消失
+  let answers = document.querySelectorAll('.answer')
+  let checkListText = document.querySelectorAll('.should-check__text')
+  for(let i = 0; i <= 3; i++) {
+    answers[i].addEventListener('input', e => {
+      answers[i].nextElementSibling.classList.add('hide')
+      checkListText[i].classList.remove('text-answer__alert')
+      if(answers[i].value.length === 0) {
+        answers[i].nextElementSibling.classList.remove('hide')
+        checkListText[i].classList.add('text-answer__alert')
+      }
+    })
+  }
+  // 當 user 填寫時，處理單選題的警告文字使其消失
+  document.querySelectorAll('.should-check__radio').forEach(element => {
+    element.addEventListener('change', e => {
+      e.target.closest('.form__question__sign-up-type').querySelector('.should-radio__alert')
+      .classList.add('hide')
+    })
+  })
+  </script>
+</body>
+</html>
