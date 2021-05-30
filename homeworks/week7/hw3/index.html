@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="./favicon.png">
+  <title>TO DO LIST</title>
+</head>
+<body>
+  <section class="to-do-list">
+    <div class="wrapper">
+      <div class="title">TO DO LIST</div>
+      <input type="text" class="create-task" autofocus>
+      <div class="to-do-list__content">  
+        <div class="task-block">
+          <div class="check-box"></div>
+          <div class="task-name">帶旺財去看醫生 🐕 (下午 2:00)</div>
+          <div class="delete"></div>
+        </div>
+        <div class="task-block">
+          <div class="check-box"></div>
+          <div class="task-name">到郵局領錢，不然要吃土了</div>
+          <div class="delete"></div>
+        </div>
+        <div class="task-block">
+          <div class="check-box"></div>
+          <div class="task-name">和小美一起去家樂福，買明天整阿明會用到的刮鬍泡</div>
+          <div class="delete"></div>
+        </div>
+        <div class="task-block">
+          <div class="check-box"></div>
+          <div class="task-name">修理紗窗順便換玻璃</div>
+          <div class="delete"></div>
+        </div>
+        <div class="task-block">
+          <div class="check-box"></div>
+          <div class="task-name">去醫院打疫苗</div>
+          <div class="delete"></div>
+        </div>
+      </div>
+      <button class="delete-all">Delete All</button>
+    </div>
+  </section>
+  
+  <script>
+    let toDoList = document.querySelector('.wrapper')
+    toDoList.addEventListener('click', e => {
+      if(e.target.classList.contains('delete')) {
+        toDoList.querySelector('.to-do-list__content').removeChild(e.target.closest('.task-block'))
+      }
+      if(e.target.classList.contains('check-box')) {
+        e.target.classList.toggle('checked')
+        e.target.closest('.task-block').classList.toggle('task-block__checked')
+      }
+      if(e.target.classList.contains('delete-all')) {
+        toDoList.querySelector('.to-do-list__content').innerHTML = ''
+        document.querySelector('.create-task').focus()
+      }
+    })
+
+    let createTask = document.querySelector('.create-task')
+    createTask.addEventListener('keypress', e => {
+      if (e.key === 'Enter'){
+        let userInput = createTask.value
+        let newTask = document.createElement('div')
+        newTask.classList.add('task-block')
+        newTask.innerHTML = 
+      `          <div class="check-box"></div>
+          <div class="task-name">${userInput}</div>
+          <div class="delete"></div>`
+        createTask.nextElementSibling.insertBefore(newTask, createTask.nextElementSibling.firstChild)
+        createTask.value = ''
+      }
+    })
+  </script>
+</body>
+</html>
