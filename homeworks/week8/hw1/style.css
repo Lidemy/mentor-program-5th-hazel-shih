@@ -1,0 +1,381 @@
+html,body {
+  font-size: 12px;
+  width: 100%;
+  height: 100%;
+}
+
+html, body, h1, h2, p {
+  margin: 0px;
+  padding: 0px;
+}
+
+.navbar {
+  box-shadow: -1.4px -1.4px 6px 0 #97a2a0;
+}
+
+.navbar .wrapper {
+  display: flex; /* 左右排列用 flex */
+  background: white;
+  justify-content: space-between;  /* 將兩元素往左右兩邊推開 */
+  align-items: center;
+  min-height: 84px;
+  max-width: 1280px;
+  margin: 0 auto;  /* div 內的元素置中 */
+  padding: 0 20px;
+}
+
+.nav__site-name {
+  color: #489846;
+  font-family: Questrial;
+  font-size: 36px;
+}
+
+.nav__list {
+  display: flex;
+  list-style: none; /* 不要前面的點 */
+  margin: 0; /* list 有預設的 margin 和 padding */
+  padding: 0;
+  font-size: 18px;
+  font-family: MicrosoftJhengHei;
+}
+
+.nav__list li {
+  margin-left: 12px;
+  border-radius: 8px;
+}
+
+.nav__list li.active ,
+.nav__list li:hover {
+  background: #ff7286;
+  transition: background 0.1s;
+}
+
+.nav__list li a {  /* 把 padding 移到 a 會讓整個按鈕變大變好按 */
+  text-decoration: none;
+  color: black;
+  display: block;
+  padding: 12px 24px;
+  font-size: 18px;
+}
+
+.nav__list li.active a ,
+.nav__list li:hover a {
+  color: white;
+}
+
+.wrapper {
+  padding: 0 96px;
+}
+
+.lucky-draw {
+  height: 100%;
+  /* position: relative; */
+}
+
+.lucky-draw__background {
+  background: url('./banner.png') no-repeat center center;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 50px;
+  box-sizing: border-box;
+}
+.lucky-draw__wrapper {
+  box-sizing: border-box;
+  width: 500px;
+  height: 540px;
+  background: white;
+  padding: 20px 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content:left;
+  text-align: center;
+}
+
+.lucky-draw__title {
+  color:#5ec1b6;
+  font-family:微軟正黑體;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.lucky-draw__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 43px;
+}
+
+.lucky-draw__content__item {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.lucky-draw__content__item:first-child {
+  align-items: center;
+}
+
+.lucky-draw__content__item-title{
+  font-family: 微軟正黑體;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: left;
+  width: 20%;
+  margin-right: 10px;
+}
+.lucky-draw__content__item-text {
+  font-family: 微軟正黑體;
+  font-size: 16px;
+  width: 70%;
+  text-align: left;
+  line-height: 1.9rem;
+  word-wrap: break-word;
+}
+.lucky-draw__btn {
+  border: none;
+  background: #e62a45;
+  color: white;
+  font-family: 微軟正黑體;
+  font-size: 20px;
+  border-radius: 8px;
+  padding: 10px 0;
+  width: 390px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.lucky-draw__btn:hover {
+  transform: scale(1.05);
+}
+
+.lucky-draw__btn:active {
+  color: #ffffffad;
+  background: #e3455d;
+}
+
+.lucky-draw__content__line {
+  border-top: 1px dotted #cdcdcd;
+}
+
+.footer__top {
+  background: #e8efee;
+}
+
+.footer__info {
+  margin-right: 10px;
+}
+
+.footer__info-text {
+  color: #484848;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.footer__info-text:first-child {
+  margin-top: 44px;
+}
+
+.footer__info-text:nth-child(4) {
+  margin-bottom: 39px;
+}
+.footer__top .wrapper {
+  padding: 0px 96px;
+  color: #484848;
+  display: flex;
+  justify-content: space-between;
+}
+.footer__bottom {
+  background: #35564b;
+  padding: 12px 0;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+}
+
+.footer__site-name {
+  color: #489846;
+  font-family: Questrial;
+  font-size: 36px;
+  margin-top: 35px;
+  text-align: right;
+}
+
+.footer__site-media {
+  font-family: Questrial;
+  font-size: 14px;
+  color: #484848;
+  margin-top: 15px;
+}
+
+.lottery-block {
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.lottery-block__text {
+font-family: 微軟正黑體;
+font-size: 30px;
+margin-bottom: 40px;
+}
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #5ec1b6;
+  border-color: #5ec1b6 transparent #5ec1b6 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.hide {
+  /* visibility: hidden; */
+  display: none;
+}
+
+.light {
+  opacity: 70%;
+}
+
+
+@media(max-width: 768px) {
+  .navbar .wrapper {
+    flex-direction: column;
+    justify-content: space-between;
+    height: 120px;
+    padding: 0;
+  }
+  .nav__list {
+    display: flex;
+    width: 100%;
+  }
+  .nav__list li {
+    flex: 1;
+    margin-left: 0;
+    border-radius: 0;
+    text-align: center;
+  }
+  .nav__list li.active{
+    flex: 1;
+  }
+  .nav__site-name {
+    margin-top: 12px;
+  }
+  .lucky-draw__wrapper {
+    max-width: auto;
+    height: auto;
+  }
+  .footer__site-name {
+    text-align: left;
+  }
+  .footer__top .wrapper {
+    flex-direction: column-reverse;
+  }
+  .footer__info-text:first-child {
+    margin-top: 25px;
+  }
+  .footer__site-media {
+    margin-top: 3px;
+  }
+  .footer__bottom {
+    padding: 10px;
+  }
+}
+
+@media(max-width: 480px) {
+  .wrapper {
+    padding: 0 70px;
+  }
+  .navbar .wrapper {
+    flex-direction: column;
+    justify-content: space-between;
+    height: 140px;
+    padding: 0;
+  }
+  .nav__list {
+    display: flex;
+    width: 100%;
+  }
+  .nav__list li {
+    flex: 1;
+    margin-left: 0;
+    border-radius: 0;
+    text-align: center;
+  }
+  .nav__list li.active{
+    flex: 1;
+  }
+  .nav__site-name {
+    margin-top: 12px;
+  }
+
+  .lucky-draw__background {
+    padding: 17px;
+  }
+
+  .lucky-draw__title {
+    font-size: 22px;
+  }
+  .lucky-draw__content__item-title{
+    font-size: 16px;
+  }
+  .lucky-draw__btn {
+    width: 250px;
+  }
+  
+  .lucky-draw__content__item-text {
+    font-size: 14px;
+  }
+  .lucky-draw__btn {
+    font-size: 16px;
+  }
+  .footer__site-name {
+    text-align: left;
+  }
+  .footer__top .wrapper {
+    flex-direction: column-reverse;
+    padding: 0px 70px;
+  }
+  .footer__info-text:first-child {
+    margin-top: 25px;
+  }
+  .footer__site-media {
+    margin-top: 3px;
+  }
+  .footer__bottom {
+    padding: 10px;
+  }
+}
