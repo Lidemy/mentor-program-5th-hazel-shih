@@ -30,7 +30,6 @@
     request.open('GET', 'https://api.twitch.tv/kraken/games/top?limit=5', true)
     request.setRequestHeader('Client-ID', '5h0cpu5wohpm88atbxwccndu8uzwrr')
     request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json')
-    request.send()
     request.onload = function() {
       if(request.status >= 200 && request.status < 400) {
         let json
@@ -127,10 +126,11 @@
       } else {
         console.log('Request Error', request.status);
       }
-      request.onerror = function(){
-        console.log('error');
-      }
     }
+    request.onerror = function(){
+      console.log('An error occurred during the transaction');
+    }
+    request.send()
     //函式：整理 response 的資料，並取得其中所需的部分建立陣列
     function createStreamData(JsonData) {
       let dataOfStreams = []
@@ -174,32 +174,32 @@
     //函式：取得該遊戲類別的串流影片
     var firstStreamId
     function getGameStreams(topGamesNamesEncoded, gameIndex) {
-        const streamRequest = new XMLHttpRequest()
-        const streamUrl = `https://api.twitch.tv/kraken/streams?limit=20`
-        streamRequest.open('GET', `${streamUrl}&game=${topGamesNamesEncoded[gameIndex]}`, true)
-        streamRequest.setRequestHeader('Client-ID', '5h0cpu5wohpm88atbxwccndu8uzwrr')
-        streamRequest.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json')
-        streamRequest.send()
-        streamRequest.onload = function() {
-          if(streamRequest.status >= 200 && streamRequest.status < 400) {
-            let gameStreamsJson
-            try {
-              gameStreamsJson = JSON.parse(streamRequest.responseText)
-            } catch (err) {
-              console.log('Please check your data, it is not JSON');
-            }
-            var gameStreamsData = createStreamData(gameStreamsJson)
-            firstStreamId = gameStreamsData[0].id
-            let streamsSection = document.querySelector('.streams')
-            streamsSection.innerHTML = ''  //避免連續點按 nav bar 按鈕 append 多個重複 element
-            createDisplayDivFromStreamsData(gameStreamsData)
-          } else {
-            console.log('Stream Request Error', streamRequest.status);
+      const streamRequest = new XMLHttpRequest()
+      const streamUrl = `https://api.twitch.tv/kraken/streams?limit=20`
+      streamRequest.open('GET', `${streamUrl}&game=${topGamesNamesEncoded[gameIndex]}`, true)
+      streamRequest.setRequestHeader('Client-ID', '5h0cpu5wohpm88atbxwccndu8uzwrr')
+      streamRequest.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json')
+      streamRequest.onload = function() {
+        if(streamRequest.status >= 200 && streamRequest.status < 400) {
+          let gameStreamsJson
+          try {
+            gameStreamsJson = JSON.parse(streamRequest.responseText)
+          } catch (err) {
+            console.log('Please check your data, it is not JSON');
           }
-          streamRequest.onerror = function(){
-            console.log('error');
-          }
+          var gameStreamsData = createStreamData(gameStreamsJson)
+          firstStreamId = gameStreamsData[0].id
+          let streamsSection = document.querySelector('.streams')
+          streamsSection.innerHTML = ''  //避免連續點按 nav bar 按鈕 append 多個重複 element
+          createDisplayDivFromStreamsData(gameStreamsData)
+        } else {
+          console.log('Stream Request Error', streamRequest.status);
         }
+      }
+      streamRequest.onerror = function(){
+        console.log('An error occurred during the transaction');
+      }
+      streamRequest.send()
     }
   </script>
 </body>
