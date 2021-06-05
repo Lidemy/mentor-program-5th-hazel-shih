@@ -73,6 +73,7 @@
     for(button of buttons) {
       button.addEventListener('click', e => {
       const request = new XMLHttpRequest()
+      request.open('GET', 'https://dvwhnbka7d.execute-api.us-east-1.amazonaws.com/default/lottery', true)
       request.onload = function() {
         if(request.status >= 200 && request.status < 400) {
           const response = request.responseText
@@ -94,7 +95,7 @@
                 initialBackground.classList.add('light')
                 lotteryBlock.style.color = "black"
                 lotteryBlock.querySelector('.lottery-block__text').innerHTML = `恭喜你中頭獎了！日本東京來回雙人遊！`
-              }, 1000)
+              }, 800)
               break
             case 'SECOND':
               loader.classList.remove('hide')
@@ -139,10 +140,12 @@
           alert('系統不穩定，請再試一次')
         }
       }
-      request.open('GET', 'https://dvwhnbka7d.execute-api.us-east-1.amazonaws.com/default/lottery', true)
+      request.onerror = function(){
+        console.log('An error occured!');
+      }
       request.send()
     })
-    }
+  }
 
 
   </script>
