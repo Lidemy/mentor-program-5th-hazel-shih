@@ -93,15 +93,17 @@ html,body {
   color: white;
   font-family: 'Roboto Condensed', sans-serif;
   text-align: left;
+  width: 65%;
 }
 
 .stream__game {
   font-weight:  bold;
   font-size: 20px;
   margin-bottom: 1px;
-  overflow:hidden;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  width: 100%;
 }
 
 .stream__display-name {
