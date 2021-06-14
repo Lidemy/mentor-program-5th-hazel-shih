@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Streams of Top 5 Games</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Odibee+Sans&family=Roboto+Condensed:wght@400;700&family=Squada+One&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar__top-games">
+    <a class="navbar__game" href="#"></a>
+    <a class="navbar__game" href="#"></a>
+    <a class="navbar__game" href="#"></a>
+    <a class="navbar__game" href="#"></a>
+    <a class="navbar__game"href="#"></a>
+  </nav>
+  <section class="streams">
+
+  </section>
+    <div class="watch-more__block"><button class="watch-more__btn">Watch  More ...</button></div>
+  <script>
+    //發送取得熱門遊戲名單的 request
+    const request = new XMLHttpRequest()
+    request.open('GET', 'https://api.twitch.tv/kraken/games/top?limit=5', true)
+    request.setRequestHeader('Client-ID', '5h0cpu5wohpm88atbxwccndu8uzwrr')
+    request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json')
+    request.onload = function() {
+      if(request.status >= 200 && request.status < 400) {
+        let json
+        try {
+          json = JSON.parse(request.responseText)
+        } catch (err) {
+          console.log('Please check your data, it is not JSON');
+        }
+        let topGames = json.top
+        let topGamesNames = []
+        for(game of topGames) {
+          topGamesNames.push(game.game.name);
+        }
+        //改變 Nav Bar 文字
+        let navBarGames = document.querySelectorAll('.navbar__game')
+        for(let i = 0; i < navBarGames.length; i++) {
+          navBarGames[i].innerText = topGamesNames[i]
+        }
+        //處理 url encoded，避免遊戲出現奇怪字元導致 API 抓不到資料
+        let topGamesNamesEncoded = []
+        for(let i = 0; i < topGamesNames.length; i++) {
+          topGamesNamesEncoded.push(encodeURIComponent(topGamesNames[i]))
+        }
+        //一到首頁就先呈現第一名遊戲的串流頁面
+        getGameStreams(topGamesNamesEncoded,0)
+        //點按 Nav Bar 按鈕發送取得串流的 request
+        let gameIndex = 0
+        document.querySelector('.navbar__top-games').addEventListener('click', e => {
+          let gameLinks = document.querySelectorAll('.navbar__game')
+          switch(e.target){
+            case gameLinks[0]:
+              gameIndex = 0
+              getGameStreams(topGamesNamesEncoded, gameIndex)
+              break
+            case gameLinks[1]:
+              gameIndex = 1
+              getGameStreams(topGamesNamesEncoded, gameIndex)
+              break
+            case gameLinks[2]:
+              gameIndex = 2
+              getGameStreams(topGamesNamesEncoded, gameIndex)
+              break
+            case gameLinks[3]:
+              gameIndex = 3
+              getGameStreams(topGamesNamesEncoded, gameIndex)
+              break
+            case gameLinks[4]:
+              gameIndex = 4
+              getGameStreams(topGamesNamesEncoded, gameIndex)
+              break
+          }
+        })
+        //點按 watch more 按鈕載入更多串流影片
+        document.querySelector('.watch-more__btn').addEventListener('click', e => {
+          let currentStreamNum = document.querySelectorAll('.stream__block').length
+          if(currentStreamNum % 20 !== 0){
+            e.target.outerHTML = `<p class="no-more-results">No  More  Results</p>`
+          } else {
+            const moreStreamRequest = new XMLHttpRequest()
+            const streamUrl = `https://api.twitch.tv/kraken/streams?limit=20`
+            moreStreamRequest.open('GET', `${streamUrl}&game=${topGamesNamesEncoded[gameIndex]}&offset=${currentStreamNum}`, true)
+            moreStreamRequest.setRequestHeader('Client-ID', '5h0cpu5wohpm88atbxwccndu8uzwrr')
+            moreStreamRequest.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json')
+            moreStreamRequest.send()
+            moreStreamRequest.onload = function() {
+              if(moreStreamRequest.status >= 200 && moreStreamRequest.status < 400){
+                let nextPageStreamsJson
+                try {
+                  nextPageStreamsJson = JSON.parse(moreStreamRequest.responseText)
+                } catch(err) {
+                  console.log('Please check your data, it is not JSON');
+                }
+                let nextPageStreamsData = createStreamData(nextPageStreamsJson)
+                for(let i = 0; i < nextPageStreamsData.length; i++){
+                  if(nextPageStreamsData[i].id === firstStreamId){
+                    if(i === 0){
+                      e.target.outerHTML = `<p class="no-more-results">No  More  Results</p>`
+                      return
+                    } else {
+                      nextPageStreamsData = nextPageStreamsData.slice(0, i - 1)
+                      createDisplayDivFromStreamsData(nextPageStreamsData)
+                      e.target.outerHTML = `<p class="no-more-results">No  More  Results</p>`
+                      return
+                    }
+                  }
+                }
+                createDisplayDivFromStreamsData(nextPageStreamsData)
+              } else {
+                console.log('More Stream Request Error', moreStreamRequest.status);
+              }
+            }
+          }
+        })
+      } else {
+        console.log('Request Error', request.status);
+      }
+    }
+    request.onerror = function(){
+      console.log('An error occurred during the transaction');
+    }
+    request.send()
+    //函式：整理 response 的資料，並取得其中所需的部分建立陣列
+    function createStreamData(JsonData) {
+      let dataOfStreams = []
+      for(let i = 0; i < JsonData.streams.length; i++) {
+        let eachStreamData = {}
+        eachStreamData['previewImage'] = JsonData.streams[i].preview.large
+        eachStreamData['logo'] = JsonData.streams[i].channel.logo
+        eachStreamData['gameName'] = JsonData.streams[i].channel.status
+        eachStreamData['displayName'] = JsonData.streams[i].channel.display_name
+        eachStreamData['viewers'] = JsonData.streams[i].viewers
+        eachStreamData['url'] = JsonData.streams[i].channel.url
+        eachStreamData['id'] = JsonData.streams[i]._id
+        dataOfStreams.push(eachStreamData)
+      }
+      return dataOfStreams
+    }
+    //函式：建立新的一批串流影片 Div
+    function createDisplayDivFromStreamsData(streamsData){
+      for(let i = 0; i < streamsData.length; i++){
+        let block = document.createElement('div')
+        block.classList.add('stream__block')
+        block.innerHTML = `
+        <div class="stream__preview"></div>
+        <div class="stream__info">
+          <div class="stream__logo"></div>
+          <div class="stream__content">
+            <div class="stream__game"></div>
+            <div class="stream__display-name"></div>
+            <div class="stream__viewers"></div>
+        </div>`
+        block.setAttribute('onclick', `window.open('${streamsData[i].url}')`)
+        block.querySelector('.stream__preview').style.background = `url('${streamsData[i].previewImage}') no-repeat center center`;
+        block.querySelector('.stream__info .stream__logo').style.background = `url('${streamsData[i].logo}') no-repeat center center / contain`;
+        block.querySelector('.stream__info .stream__content .stream__game').innerText = streamsData[i].gameName;
+        block.querySelector('.stream__info .stream__content .stream__display-name').innerText = streamsData[i].displayName;
+        block.querySelector('.stream__info .stream__content .stream__viewers').innerText = `${streamsData[i].viewers} viewers`;
+        let streamsSection = document.querySelector('.streams')
+        streamsSection.appendChild(block)
+      }
+    }
+    //函式：取得該遊戲類別的串流影片
+    var firstStreamId
+    function getGameStreams(topGamesNamesEncoded, gameIndex) {
+      const streamRequest = new XMLHttpRequest()
+      const streamUrl = `https://api.twitch.tv/kraken/streams?limit=20`
+      streamRequest.open('GET', `${streamUrl}&game=${topGamesNamesEncoded[gameIndex]}`, true)
+      streamRequest.setRequestHeader('Client-ID', '5h0cpu5wohpm88atbxwccndu8uzwrr')
+      streamRequest.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json')
+      streamRequest.onload = function() {
+        if(streamRequest.status >= 200 && streamRequest.status < 400) {
+          let gameStreamsJson
+          try {
+            gameStreamsJson = JSON.parse(streamRequest.responseText)
+          } catch (err) {
+            console.log('Please check your data, it is not JSON');
+          }
+          var gameStreamsData = createStreamData(gameStreamsJson)
+          firstStreamId = gameStreamsData[0].id
+          let streamsSection = document.querySelector('.streams')
+          streamsSection.innerHTML = ''  //避免連續點按 nav bar 按鈕 append 多個重複 element
+          createDisplayDivFromStreamsData(gameStreamsData)
+        } else {
+          console.log('Stream Request Error', streamRequest.status);
+        }
+      }
+      streamRequest.onerror = function(){
+        console.log('An error occurred during the transaction');
+      }
+      streamRequest.send()
+    }
+  </script>
+</body>
+</html>
