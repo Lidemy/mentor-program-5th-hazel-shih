@@ -54,7 +54,7 @@ $_SESSION['admin'] = 'admin';
       <div class="top-bar__right">
         <?php echo "<p class='top-bar__nav__hello'>Hello! " . escape($_SESSION['username']) . "</p>" ?>
         <a class="top-bar__nav__link" href="edit.php">新增文章</a>
-        <a class="top-bar__nav__link" href="logout.php">登出</a>
+        <a class="top-bar__nav__link" href="handle_logout.php">登出</a>
       </div>
     </div>
     <div class="top-banner">
