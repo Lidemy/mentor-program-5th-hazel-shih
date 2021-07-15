@@ -2,6 +2,10 @@
 session_start();
 require_once('conn.php');
 
+if($_SESSION['identity'] !== 'admin'){
+  die('你不是管理員，可惡的小駭客ˋˊ');
+}
+
 //更新文章
 if($_GET['id']){
   $id = $_GET['id'];
