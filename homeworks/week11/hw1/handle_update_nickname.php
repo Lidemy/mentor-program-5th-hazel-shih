@@ -4,8 +4,8 @@ require_once('conn.php');
 require_once('utils.php');
 
 if(!$_SESSION['identity']){
-  die('無會員身份，無法使用編輯暱稱功能！');
   header('Location: index.php');
+  die('無會員身份，無法使用編輯暱稱功能！');
 }
 
 if(empty($_POST['nickname'])){
@@ -26,6 +26,6 @@ if(!$result){
 }
 
 alert('已更新暱稱！', 'index.php');
-// header('Location: index.php');
+exit();
 
 ?>

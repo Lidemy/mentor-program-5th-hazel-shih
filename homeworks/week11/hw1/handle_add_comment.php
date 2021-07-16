@@ -3,8 +3,8 @@ session_start();
 require_once('conn.php');
 
 if(!$_SESSION['username'] || $_SESSION['identity'] === 'banned'){
-  die('沒有登入或是被停權，無法使用留言功能！');
   header('Location: index.php');
+  die('沒有登入或是被停權，無法使用留言功能！');
 }
 
 if(empty($_POST['content'])){
@@ -25,5 +25,6 @@ if(!$result){
 }
 
 header('Location: index.php');
+exit();
 
 ?>

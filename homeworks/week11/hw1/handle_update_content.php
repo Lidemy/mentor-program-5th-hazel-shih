@@ -3,8 +3,8 @@ session_start();
 require_once('conn.php');
 
 if(!$_SESSION['identity']){
-  die('無會員身份，無法使用編輯留言功能！');
   header('Location: index.php');
+  die('無會員身份，無法使用編輯留言功能！');
 }
 
 if(empty($_POST['content'])){
@@ -32,5 +32,5 @@ if(!$result){
 }
 
 header('Location: index.php');
-
+exit();
 ?>

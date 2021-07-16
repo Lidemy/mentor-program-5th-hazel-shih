@@ -34,6 +34,7 @@
     $_SESSION['username'] = $username;
     identityAuthentication($username);
     header('Location: index.php');
+    exit();
   } else {
     header('Location: login.php?errCode=2');
     die('查無此筆資料：' . $conn_error);

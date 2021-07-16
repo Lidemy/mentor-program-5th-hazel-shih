@@ -9,8 +9,10 @@ if($_SESSION['identity'] !== 'admin'){
 if(empty($_GET['username'])){
   if($_SESSION['request-origin'] === 'admin'){
     header('Location: admin.php?errCode=1');
+    exit();
   } else {
     header('Location: user-info.php?errCode=1');
+    exit();
   }
   die('無填寫 username');
 }
@@ -30,12 +32,14 @@ $result = $stmt -> get_result();
 if($result -> num_rows === 0){
   if($_SESSION['request-origin'] === 'admin'){
     header('Location: admin.php?errCode=2');
+    exit();
   } else {
     header('Location: user-info.php?errCode=2');
+    exit();
   }
   die('無填寫 username');
 }
 
 header('Location: user-info.php?username=' . $username);
-
+exit();
 ?>
