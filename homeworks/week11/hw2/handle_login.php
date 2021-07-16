@@ -21,6 +21,12 @@ if(!$result){
 }
 
 $result = $stmt -> get_result();
+
+if($result -> num_rows === 0){
+  header('Location: login.php?errCode=2');
+  die('查無此用戶');
+}
+
 if($row = $result -> fetch_assoc()){
   if(password_verify($password, $row['password'])){
     if($row['identity'] === 'admin'){
@@ -33,9 +39,6 @@ if($row = $result -> fetch_assoc()){
     header('Location: login.php?errCode=3');
     die('密碼錯誤');
   }
-} else {
-  header('Location: login.php?errCode=2');
-  die('查無此用戶');
 }
 
 ?>

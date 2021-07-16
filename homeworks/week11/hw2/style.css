@@ -389,6 +389,14 @@ body {
   font-weight: bold;
   font-size: 22px;
   text-decoration: none;
+}
+
+.article__list-title {
+  color: #222831;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: bold;
+  font-size: 22px;
+  text-decoration: none;
   width: 70%;
 }
 

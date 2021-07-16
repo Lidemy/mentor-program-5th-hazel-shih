@@ -9,7 +9,9 @@ if($_GET['page']){
 }
 //計算文章總篇數
 $sql = "SELECT * FROM hazel_blog_articles WHERE is_deleted = 'no'";
-$result = $conn -> query($sql);
+$stmt = $conn -> prepare($sql);
+$result = $stmt -> execute();
+$result = $stmt -> get_result();
 
 if(!$result){
   die($conn -> error);
@@ -24,7 +26,9 @@ $total_page = ceil($articles_num / $article_per_page);
 
 $sql = "SELECT * FROM hazel_blog_articles WHERE is_deleted = 'no' ORDER BY id DESC " . 
 "LIMIT " . $article_per_page . " OFFSET " . $offset;
-$result = $conn -> query($sql);
+$stmt = $conn -> prepare($sql);
+$result = $stmt -> execute();
+$result = $stmt -> get_result();
 
 if(!$result){
   die($conn -> error);
@@ -99,25 +103,25 @@ if(!$result){
       <div class="article">
         <img class="article__img" src="https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1051&q=80">
         <div class="article__right-part">
-          <a class="article__title" href="article.php?id=<?php echo $row['id']; ?>"><?php echo escape($row['title']); ?></a>
+          <a class="article__title" href="article.php?id=<?php echo escape($row['id']); ?>"><?php echo escape($row['title']); ?></a>
           <div class="article__info">
             <div class="article__info__category"><?php echo escape($row['category']); ?></div>
             <div class="article__info__author">Hazel Shih</div>
-            <div class="article__info__time"><?php echo $row['created_at']; ?></div>
+            <div class="article__info__time"><?php echo escape($row['created_at']); ?></div>
           </div>
           <div class="article__content"><?php echo stripTags($row['content']); ?></div>
-          <a class="article__read-more" href="article.php?id=<?php echo $row['id']; ?>">閱讀更多</a>
+          <a class="article__read-more" href="article.php?id=<?php echo escape($row['id']); ?>">閱讀更多</a>
         </div>
       </div>
       <?php } ?>
       <div class="page-system">
       <?php if($page > 1){ ?>
       <a class="page-system__link" href="index.php">回首頁</a>
-      <a class="page-system__link" href="index.php?page=<?php echo $page - 1 ?>">上一頁</a>
+      <a class="page-system__link" href="index.php?page=<?php echo escape($page - 1) ?>">上一頁</a>
       <?php } ?>
       <?php if($page < $total_page){ ?>
-      <a class="page-system__link" href="index.php?page=<?php echo $page + 1 ?>">下一頁</a>
-      <a class="page-system__link" href="index.php?page=<?php echo $total_page ?>">最後頁</a>
+      <a class="page-system__link" href="index.php?page=<?php echo escape($page + 1) ?>">下一頁</a>
+      <a class="page-system__link" href="index.php?page=<?php echo escape($total_page) ?>">最後頁</a>
       <?php } ?>
     </div>
 

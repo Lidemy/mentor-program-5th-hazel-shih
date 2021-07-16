@@ -4,7 +4,9 @@ require_once('conn.php');
 require_once('utils.php');
 
 $sql = "SELECT * FROM hazel_blog_articles WHERE is_deleted = 'no' ORDER BY id DESC";
-$result = $conn -> query($sql);
+$stmt = $conn -> prepare($sql);
+$result = $stmt -> execute();
+$result = $stmt -> get_result();
 
 if(!$result){
   die($conn -> error);
@@ -72,9 +74,9 @@ if(!$result){
     </div>
     <?php while($row = $result -> fetch_assoc()){ ?>
     <div class="article-list-div">
-    <a class="article__title" href="article.php?id=<?php echo $row['id']; ?>"><?php echo escape($row['title']); ?></a>
+    <a class="article__list-title" href="article.php?id=<?php echo escape($row['id']); ?>"><?php echo escape($row['title']); ?></a>
       <div class="article-list__info">
-        <p class="article-list__info__time"><?php echo $row['created_at']; ?></p>
+        <p class="article-list__info__time"><?php echo escape($row['created_at']); ?></p>
       </div>
     </div>
     <?php } ?>

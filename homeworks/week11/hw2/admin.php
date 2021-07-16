@@ -8,7 +8,9 @@ if($_SESSION['identity'] !== 'admin'){
 }
 
 $sql = "SELECT * FROM hazel_blog_articles WHERE is_deleted = 'no' ORDER BY id DESC";
-$result = $conn -> query($sql);
+$stmt = $conn -> prepare($sql);
+$result = $stmt -> execute();
+$result = $stmt -> get_result();
 
 if(!$result){
   die($conn -> error);
@@ -73,11 +75,11 @@ $_SESSION['admin'] = 'admin';
     </div>
     <?php while($row = $result -> fetch_assoc()){ ?>
     <div class="article-list-div">
-    <a class="article__title" href="article.php?id=<?php echo $row['id']; ?>"><?php echo escape($row['title']); ?></a>
+    <a class="article__list-title" href="article.php?id=<?php echo escape($row['id']); ?>"><?php echo escape($row['title']); ?></a>
       <div class="article-list__info">
-        <p class="article-list__info__time"><?php echo $row['created_at']; ?></p>
-        <a class="article-list__info__btn" href="edit.php?id=<?php echo $row['id']; ?>">編輯</a>
-        <a onclick="return confirm('確定要刪除文章嗎？');" class="article-list__info__btn" href="handle_delete.php?id=<?php echo $row['id']; ?>">刪除</a>
+        <p class="article-list__info__time"><?php echo escape($row['created_at']); ?></p>
+        <a class="article-list__info__btn" href="edit.php?id=<?php echo escape($row['id']); ?>">編輯</a>
+        <a onclick="return confirm('確定要刪除文章嗎？');" class="article-list__info__btn" href="handle_delete.php?id=<?php echo escape($row['id']); ?>">刪除</a>
       </div>
     </div>
     <?php } ?>

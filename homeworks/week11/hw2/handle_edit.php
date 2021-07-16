@@ -1,6 +1,7 @@
 <?php 
 session_start();
 require_once('conn.php');
+require_once('utils.php');
 
 if($_SESSION['identity'] !== 'admin'){
   die('你不是管理員，可惡的小駭客ˋˊ');
@@ -20,6 +21,7 @@ $title = $_POST['title'];
 $category = $_POST['category'];
 $content = $_POST['content'];
 
+//兩種編輯情形：更新文章、產新文章
 $sql = NULL;
 if($id){
   $sql = 'UPDATE hazel_blog_articles SET title = ?, category = ?, content = ? WHERE id =' . $id;
@@ -35,7 +37,7 @@ if(!$result){
 }
 
 if($id){
-  header('Location: article.php?id=' . $id);
+  header('Location: article.php?id=' . escape($id));
   exit();
 } else {
   header('Location: index.php');

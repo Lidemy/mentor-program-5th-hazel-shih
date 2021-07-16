@@ -5,8 +5,11 @@ require_once('utils.php');
 
 $id = $_GET['id'];
 
-$sql = 'SELECT * FROM hazel_blog_articles WHERE id=' . $id;
-$result = $conn -> query($sql);
+$sql = 'SELECT * FROM hazel_blog_articles WHERE id = ? ';
+$stmt = $conn -> prepare($sql);
+$stmt -> bind_param('i', $id);
+$result = $stmt -> execute();
+$result = $stmt -> get_result();
 
 if(!$result){
   die($conn -> error);
@@ -53,7 +56,7 @@ $_SESSION['article'] = 'article';
       </div>
       <div class="top-bar__right">
         <?php if($_SESSION['username']){ ?>
-          <p class="top-bar__nav__hello">Hello! <?php echo $_SESSION['username']; ?></p>
+          <p class="top-bar__nav__hello">Hello! <?php echo escape($_SESSION['username']); ?></p>
           <?php if($_SESSION['identity'] === 'admin'){
             echo '<a class="top-bar__nav__link" href="admin.php">管理後台</a>';
           } ?>
@@ -75,17 +78,17 @@ $_SESSION['article'] = 'article';
   <section class="post-area">
       <?php if($_SESSION['identity'] === 'admin'){ ?>
         <div class="post-btns">
-          <a class="post-btns__btn" href="edit.php?id=<?php echo $row['id']; ?>">編輯</a>
-          <a onclick="return confirm('確定要刪除文章嗎？');" class="post-btns__btn" href="handle_delete.php?id=<?php echo $_GET['id']; ?>">刪除</a>
+          <a class="post-btns__btn" href="edit.php?id=<?php echo escape($row['id']); ?>">編輯</a>
+          <a onclick="return confirm('確定要刪除文章嗎？');" class="post-btns__btn" href="handle_delete.php?id=<?php echo escape($_GET['id']); ?>">刪除</a>
         </div>
       <?php } ?>
       <div class="post__first-row">
         <h1 class="post__title"><?php echo escape($row['title']); ?></h1>
       </div>
       <div class="article__info">
-        <div class="article__info__category"><?php echo $row['category']; ?></div>
+        <div class="article__info__category"><?php echo escape($row['category']); ?></div>
         <div class="article__info__author">Hazel Shih</div>
-        <div class="article__info__time"><?php echo $row['created_at']; ?></div>
+        <div class="article__info__time"><?php echo escape($row['created_at']); ?></div>
       </div>
       <div class="post-content">
       <?php echo $row['content']; ?>
