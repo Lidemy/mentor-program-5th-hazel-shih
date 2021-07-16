@@ -117,11 +117,11 @@
               <div class="comment-display__info__top__update">
                 <a href='#' class="start-edit">編輯留言</a>
                 <a href='#' class="hide cancel-edit">取消編輯</a>
-                <a href='handle_delete_comment.php?id=<?php echo $row['id'] ?>' class="delete-comment">刪除留言</a>
+                <a href='handle_delete_comment.php?id=<?php echo escape($row['id']) ?>' class="delete-comment">刪除留言</a>
               </div>
             <?php } ?>
           </div>
-          <div class="comment-display__info__content" id="<?php echo $row['id'] ?>"><?php echo escape($row['content']); ?></div>
+          <div class="comment-display__info__content" id="<?php echo escape($row['id']) ?>"><?php echo escape($row['content']); ?></div>
         </div>
       </div>
       <?php } ?>
@@ -140,14 +140,14 @@
       
       ?>
       <div class="page-info">
-        <div class="page-info__page-count"><span>總共有 <?php echo $row['count'] ?> 筆留言，</span><span>頁數：<?php echo $page . '/' . $total_page; ?></span></div>
+        <div class="page-info__page-count"><span>總共有 <?php echo escape($row['count']) ?> 筆留言，</span><span>頁數：<?php echo escape($page) . '/' . escape($total_page); ?></span></div>
         <?php if($page != 1){ ?>
         <a href="index.php?page=1" class="page-button">回第一頁</a>
-        <a href="index.php?page=<?php echo $page - 1 ?>" class="page-button">上一頁</a>
+        <a href="index.php?page=<?php echo escape($page - 1) ?>" class="page-button">上一頁</a>
         <?php } ?>
         <?php if($page != $total_page){ ?>
-        <a href="index.php?page=<?php echo $page + 1 ?>" class="page-button">下一頁</a>
-        <a href="index.php?page=<?php echo $total_page ?>" class="page-button">最後一頁</a>
+        <a href="index.php?page=<?php echo escape($page + 1) ?>" class="page-button">下一頁</a>
+        <a href="index.php?page=<?php echo escape($total_page) ?>" class="page-button">最後一頁</a>
         <?php } ?>
       </div>
     

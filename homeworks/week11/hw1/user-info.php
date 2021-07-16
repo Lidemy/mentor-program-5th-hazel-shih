@@ -121,7 +121,7 @@ if($count_row['count'] == 0){
             <td class="edit-user-table__item">
               <form method="POST" action="handle_update_identity.php?username=<?php echo escape($row['username']) ?>">
               <select name="selected-identity">
-                <option><?php echo $row['identity'] ?></option>
+                <option><?php echo escape($row['identity']) ?></option>
                 <option><?php if($row['identity'] == '一般使用者'){
                   echo '停權使用者'; } else { echo '一般使用者'; } ?></option>
               </select>
@@ -136,7 +136,7 @@ if($count_row['count'] == 0){
 
     
       <section class="comment-record">
-        <h2 class="comment-record-title"><?php echo $username ?>的留言紀錄：</h2>
+        <h2 class="comment-record-title"><?php echo escape($username) ?>的留言紀錄：</h2>
         <?php if($comment_result -> num_rows !== 0){ ?>
         <table class="edit-user-table">
           <tbody class="edit-user-table__body">
@@ -152,9 +152,9 @@ if($count_row['count'] == 0){
             <td class="edit-user-table__item"><?php echo escape($row['content']) ?></td>
             <td class="edit-user-table__item"><?php echo escape($row['created_at']); ?></a></td>
             <td class="edit-user-table__item">
-            <form method="POST" action="handle_delete_comment.php?id=<?php echo $row['id'] ?>&username=<?php echo $username; ?>">
+            <form method="POST" action="handle_delete_comment.php?id=<?php echo escape($row['id']) ?>&username=<?php echo escape($username); ?>">
                 <select name="comment-status">
-                  <option><?php echo $row['is_deleted'] ?></option>
+                  <option><?php echo escape($row['is_deleted']) ?></option>
                   <option><?php if($row['is_deleted'] == '留存'){ echo '刪除'; } else { echo '留存'; } ?></option>
                 </select>
                 <input type="submit" value="送出">
@@ -171,14 +171,14 @@ if($count_row['count'] == 0){
       
       <div class="line"></div>
       <div class="page-info">
-        <div class="page-info__page-count"><span>總共有 <?php echo $count_row['count'] ?> 筆留言，</span><span>頁數：<?php echo $page . '/' . $total_page; ?></span></div>
+        <div class="page-info__page-count"><span>總共有 <?php echo escape($count_row['count']) ?> 筆留言，</span><span>頁數：<?php echo escape($page) . '/' . escape($total_page); ?></span></div>
         <?php if($page != 1){ ?>
-        <a href="user-info.php?username=<?php echo $username ?>&page=1" class="page-button">回第一頁</a>
-        <a href="user-info.php?username=<?php echo $username ?>&page=<?php echo $page - 1 ?>" class="page-button">上一頁</a>
+        <a href="user-info.php?username=<?php echo escape($username) ?>&page=1" class="page-button">回第一頁</a>
+        <a href="user-info.php?username=<?php echo escape($username) ?>&page=<?php echo escape($page - 1) ?>" class="page-button">上一頁</a>
         <?php } ?>
         <?php if($page != $total_page){ ?>
-        <a href="user-info.php?username=<?php echo $username ?>&page=<?php echo $page + 1 ?>" class="page-button">下一頁</a>
-        <a href="user-info.php?username=<?php echo $username ?>&page=<?php echo $total_page ?>" class="page-button">最後一頁</a>
+        <a href="user-info.php?username=<?php echo escape($username) ?>&page=<?php echo escape($page + 1) ?>" class="page-button">下一頁</a>
+        <a href="user-info.php?username=<?php echo escape($username) ?>&page=<?php echo escape($total_page) ?>" class="page-button">最後一頁</a>
         <?php } ?>
       </div>
     </section>

@@ -24,18 +24,24 @@ if($_SESSION['identity'] === 'admin'){
     $stmt = $conn -> prepare($sql);
     $stmt -> bind_param('i', $id);
     $result = $stmt -> execute();
+    if(!$result){
+      die($conn -> error);
+    }
+    alert('成功刪除留言！', 'index.php');
+    exit();
   }
-} else if($_SESSION['identity'] === 'normal' || $_SESSION['identity'] === 'banned') {
-  //來自非管理員的請求
+}
+
+//來自非管理員的請求
+if($_SESSION['identity'] === 'normal' || $_SESSION['identity'] === 'banned') {
   $sql = "UPDATE hazel_comments SET is_deleted = '刪除' WHERE id = ? AND username = ?";
   $stmt = $conn -> prepare($sql);
   $stmt -> bind_param('is', $id, $_SESSION['username']);
   $result = $stmt -> execute();
+  if(!$result){
+    die($conn -> error);
+  }
+  alert('成功刪除留言！', 'index.php');
+  exit();
 }
-
-if(!$result){
-  die($conn -> error);
-}
-
-alert('成功刪除留言！', 'index.php');
 ?>

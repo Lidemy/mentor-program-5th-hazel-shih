@@ -22,5 +22,5 @@ if(!$result){
 $result = $stmt -> get_result();
 
 alert('成功編輯使用者身份！', $_SERVER['HTTP_REFERER']);
-
+exit();
 ?>

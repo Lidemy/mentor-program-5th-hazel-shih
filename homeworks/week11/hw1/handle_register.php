@@ -30,6 +30,7 @@
 
   //若以上 die 都沒發生，就自動登入並且導回首頁
   $_SESSION['username'] = $username;
+  $_SESSION['identity'] = 'normal';
   header('Location: index.php');
   exit();
 

@@ -1,10 +1,11 @@
 <?php 
   session_start();
+  require_once('conn.php');
+  require_once('utils.php');
+
   if($_SESSION['identity'] !== 'admin'){
     die('你不是管理員！可惡的小駭客');
   }
-  require_once('conn.php');
-  require_once('utils.php');
 
   $_SESSION['request-origin'] = 'admin';
 
@@ -86,7 +87,7 @@
           <td class="edit-user-table__item">
             <form method="POST" action="handle_update_identity.php?username=<?php echo escape($row['username']) ?>">
               <select name="selected-identity">
-                <option><?php echo $row['identity'] ?></option>
+                <option><?php echo escape($row['identity']) ?></option>
                 <option><?php if($row['identity'] == '一般使用者'){
                   echo '停權使用者'; } else { echo '一般使用者'; } ?></option>
               </select>
