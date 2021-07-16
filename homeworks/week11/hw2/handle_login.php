@@ -28,6 +28,7 @@ if($row = $result -> fetch_assoc()){
     }
     $_SESSION['username'] = $username;
     header('Location: index.php');
+    exit();
   } else {
     header('Location: login.php?errCode=3');
     die('密碼錯誤');

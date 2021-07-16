@@ -41,7 +41,7 @@ if($_GET['id']){
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300&display=swap" rel="stylesheet">
   <title>Blog-edit</title>
   <link rel="stylesheet" type="text/css" href="node_modules/trix/trix.css">
-  <script type="text/javascript" src="trix.js"></script>
+  <script type="text/javascript" src="node_modules/trix/trix.js"></script>
 </head>
 <body>
   <section class="top">
@@ -96,7 +96,13 @@ if($_GET['id']){
           <trix-editor input="x" value=<?php echo $row['content']; ?>></trix-editor>
           <?php } else { ?><trix-editor input="x"></trix-editor>
           <?php } ?>
-        <input class="post-area__form__btn" type="submit" value="送出文章">
+        <?php if($_GET['errCode']){
+          $code = $_GET['errCode'];
+          if($code === '1'){
+            echo '<p class="error">請檢查標題、類別、內容是否已填寫！</p>';
+          }
+        } ?>
+        <input onclick="return confirm('Hey！標題、類別、內容都已經填寫了嗎？');" class="post-area__form__btn" type="submit" value="送出文章">
       </form>
     </section>
   </section>
@@ -104,7 +110,5 @@ if($_GET['id']){
   <footer>
     <div>Copyright © 2021 Hazel's Blog All Rights Reserved.</div>
   </footer>
-  
-<script src="node_modules/trix/trix.js"></script>
 </body>
 </html>

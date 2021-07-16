@@ -36,8 +36,10 @@ if(!$result){
 
 if($id){
   header('Location: article.php?id=' . $id);
+  exit();
 } else {
   header('Location: index.php');
+  exit();
 }
 
 
