@@ -1,0 +1,270 @@
+html,body {
+  font-size: 12px;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(35deg, #accbee 0%, #e7f0fd 100%);
+  background-size: cover;
+  overflow: auto;
+}
+
+html, body, h1, h2, p {
+  margin: 0px;
+  padding: 0px;
+}
+
+
+.warning {
+  background: pink;
+  color: darkred;
+  font-weight: bold;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px;
+}
+
+.error {
+  color: rgb(197, 44, 44);
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.comment-writting-area__desc {
+  margin-bottom: 5px;
+}
+
+.comment-area {
+  box-sizing: border-box;
+  background: #F7F8FD;
+  width: 50%;
+  margin: 30px auto;
+  padding: 30px 30px 30px 30px;
+  border-radius: 10px;
+}
+
+.comment-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment-top__title {
+  font-family: 'Roboto', sans-serif;
+  color: #93aae9;
+  font-weight: bold;
+  font-size: 30px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.comment-top__btns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment-top__btn {
+  height: 30px;
+  border:1px solid #93aae9;
+  cursor: pointer;
+  background-color: white;
+  text-decoration: none;
+  font-size: 14px;
+  color: black;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  margin-right: 10px;
+}
+
+.comment-top__btn:last-child{
+  margin-right: 0;
+}
+
+.comment-writting-area {
+  margin-top: 10px;
+  position: relative;
+  width: 75%;
+}
+
+.comment-writting-area__form__nickname {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.comment-writting-area__form__nickname__input {
+  border:1px solid #93aae9;
+}
+
+.comment-writting-area__form__content {
+  display: flex;
+}
+
+.comment-writting-area__form__content__textarea {
+  border:1px solid #93aae9;
+  margin-right: 10px;
+  padding: 0;
+}
+
+.comment-writting-area__form__submit {
+  height: 30px;
+  border:1px solid #93aae9;
+  cursor: pointer;
+  background-color: white;
+  bottom: 0;
+  right: 0;
+}
+
+.line {
+  margin: 30px 0;
+  height: 1px;
+  background-color: rgb(215, 215, 215);
+}
+
+.comment-display {
+  display: flex;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.comment-display__fake-avatar {
+  border-radius: 50%;
+  background-color: rgb(192, 227, 238);
+  width: 50px;
+  height: 50px;
+}
+
+.comment-display__info {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.comment-display__info__top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.comment-display__info__nickname {
+  margin-right: 10px;
+  display: inline;
+  font-family: 'Roboto', sans-serif;
+  color: #587ee9;
+  font-weight: bold;
+  font-size: 18px;
+
+}
+
+.comment-display__info__date {
+  display: inline;
+  display: inline;
+  font-family: 'Roboto', sans-serif;
+  color: #939393;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.comment-display__info__content {
+  white-space: pre-line;
+}
+
+.comment-display__info__top__update {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.search-user-bar {
+  position: relative;
+  padding: 5px;
+  width: 200px;
+  box-sizing: border-box;
+}
+
+.search-user-bar__form {
+  display: flex;
+  align-items: center;
+}
+
+.search-user-bar__label {
+  font-size: 18px;
+}
+
+.search-user-bar__btn {
+  background: #F7F8FD;
+  border: none;
+  cursor: pointer;
+}
+
+.search-user-bar__btn__img {
+  width: 25px;
+}
+
+.edit-user-table {
+  width: 100%;
+  font-size: 16px;
+  line-height: 40px;
+  margin-top: 15px;
+}
+
+.edit-user-table__row {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.edit-user-table__row:nth-child(odd){
+  background: #cce6f4;
+}
+
+.edit-user-table__row:nth-child(even){
+  background: #f2f4ff;
+}
+
+
+#first-row {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  background: #6290c8;
+}
+
+.edit-user-table__item {
+  text-align: center;
+  width: 25%;
+  padding: 2px;
+}
+
+.comment-record-title {
+  font-weight: normal;
+  font-size: 18px;
+  margin-top: 30px;
+}
+
+.comment-record__result-word {
+  font-weight: normal;
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+
+.page-info {
+  text-align:center;
+}
+
+.page-info__page-count {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.page-button {
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+
+.hide {
+  display: none;
+}
