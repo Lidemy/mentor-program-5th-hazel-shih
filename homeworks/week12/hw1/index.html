@@ -74,8 +74,9 @@
           alert(data.message);
           return
         }
+        const commentPerPage = 5;
         const comments = data.discussions;
-        let lastCommentID = comments[4].id;
+        let lastCommentID = comments[commentPerPage - 1].id;
         for(let i = 0; i < comments.length; i++){
           if(i === 5){
             if(comments.length > 5) $('.container').append('<button type="button" class="load-more btn btn-info">載入更多</button>');
@@ -93,10 +94,11 @@
                   for(let i = 0; i < moreComments.length; i++){
                     addCommentToDom($('.comments'), moreComments[i], true)
                   }
-                  lastCommentID = moreComments[moreComments.length - 1].id;
+                  if(moreComments.length !== 0) lastCommentID = moreComments[moreComments.length - 1].id;
                 },
-                error: function(err) {
-                  console.log(err);
+                error: function(error) {
+                  alert('伺服器錯誤，請稍後再試')
+                  console.log(error);
                   return
                 }
                 });
