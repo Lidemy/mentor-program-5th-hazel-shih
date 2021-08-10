@@ -194,13 +194,13 @@
         let todosData = JSON.stringify(todosClone.html());
         $.ajax({
           type: 'POST',
-          url: 'http://mentor-program.co/mtr04group5/hazel/week12/hw2/api_store_todo.php',
+          url: 'http://localhost/hazel/week12/hw2/api_store_todo.php',
           data: {todosData},
           success: function(resp) {
             if(resp.todosID){
               todosID = resp.todosID;
-              let pureURL = (window.location.href.split('?'))[0];
-              todoListURL = `${pureURL}?todosID=${todosID}`;
+              let pureURL = (window.location.href.split('#'))[0];
+              todoListURL = `${pureURL}#todosID=${todosID}`;
               window.location.href = todoListURL;
               alert(`儲存 todo list 成功！下次輸入當前網址『${todoListURL}』就可以查看您所儲存的 todo list 內容！`)
             } else {
@@ -215,25 +215,6 @@
           }
         });
       });
-      //當使用者有 todos ID
-      let params = (new URL(document.location)).searchParams;
-      if(params.get('todosID')){
-        let todosID = params.get('todosID');
-        $.ajax({
-          type: 'GET',
-          url: 'http://mentor-program.co/mtr04group5/hazel/week12/hw2/api_display_store_todo.php',
-          data: {todosID},
-          success: function(resp) {
-            let todosContent =  JSON.parse(resp.todos.content);
-            $('.todos').append($(todosContent));
-          },
-          error: function(err) {
-            console.log(err);
-            alert('Oops! There is an Error.');
-            return
-          }
-        });
-      }
       //當篩選按鈕被按
         $('.form-select').change(function(e){
           let choose = $('.form-select').val();
@@ -268,6 +249,37 @@
               break;
           }
         })
+        //當使用者有 todos ID
+        function renderHasIDView(todosID){
+          $.ajax({
+            type: 'GET',
+            url: 'http://localhost/hazel/week12/hw2/api_display_store_todo.php',
+            data: {todosID},
+            success: function(resp) {
+              $('.todos').empty();
+              $('.all').attr("selected","selected")
+              $('.finished').removeAttr("selected","selected");
+              $('.unfinished').removeAttr("selected","selected");
+              let todosContent =  JSON.parse(resp.todos.content);
+              $('.todos').append($(todosContent));
+            },
+            error: function(err) {
+              console.log(err);
+              alert('Oops! There is an Error.');
+              return
+            }
+          });
+        }
+        //狀況一、當使用者從目前 ID 到另一個 ID
+        window.onhashchange = function(){
+          let changeHashValue = (window.location.href).split('todosID=')[1];
+          renderHasIDView(changeHashValue);
+        }
+        //狀況二、使用者一進網址就自帶 ID
+        var currentHashValue = (window.location.href).split('todosID=')[1];
+        if(currentHashValue) {
+          renderHasIDView(currentHashValue);
+        }
     });
   </script>
 </body>
