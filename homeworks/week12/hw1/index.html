@@ -42,48 +42,48 @@
         .replace(/\//g, '&#x2F');
     }
 
+
+
     function addCommentToDom(parentNode, comment, isAppend){
-      if(isAppend){
-        parentNode.append(`
+      var cardContent = `
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">${escape(comment.nickname)}</h5>
             <p class="card-text">${escape(comment.content)}</p>
           </div>
-        </div>
-      `)
+        </div>`
+      if(isAppend){
+        parentNode.append(cardContent)
         return
       }
-      parentNode.prepend(`
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">${escape(comment.nickname)}</h5>
-            <p class="card-text">${escape(comment.content)}</p>
-          </div>
-        </div>
-      `)
+      parentNode.prepend(cardContent)
       return
     }
 
     $(document).ready(() => {
+      //一開始先載入最新的五則留言
       $.ajax({
         type: 'GET',
-        url: "http://localhost/hazel/week12/hw1/api_comments.php?site_key=hazel",
+        url: "http://mentor-program.co/mtr04group5/hazel/week12/hw1/api_comments.php?site_key=hazel",
         success: function(data) {
-        if(!data.ok){
-          alert(data.message);
-          return
-        }
-        const commentPerPage = 5;
-        const comments = data.discussions;
-        let lastCommentID = comments[commentPerPage - 1].id;
-        for(let i = 0; i < comments.length; i++){
-          if(i === 5){
-            if(comments.length > 5) $('.container').append('<button type="button" class="load-more btn btn-info">載入更多</button>');
+          if(!data.ok){
+            alert(data.message);
+            return
+          }
+          const comments = data.discussions;
+          if(comments.length === 0) return;
+          
+          var lastCommentID = comments[comments.length - 1].id;
+          for(let i = 0; i < comments.length; i++){
+            addCommentToDom($('.comments'), comments[i], true)
+          }
+          //載入更多留言
+          if(comments.length === 5) {
+            $('.container').append('<button type="button" class="load-more btn btn-info">載入更多</button>');
             $('.load-more').click(e => {
               $.ajax({
                 type: 'GET',
-                url: `http://localhost/hazel/week12/hw1/api_load_more_comments.php`,
+                url: `http://mentor-program.co/mtr04group5/hazel/week12/hw1/api_load_more_comments.php`,
                 data: `id=${lastCommentID}`,
                 success: function(data) {
                   let moreComments = data.discussions;
@@ -101,15 +101,11 @@
                   console.log(error);
                   return
                 }
-                });
-            })
-            return
+              });
+            });
           }
-          let comment = comments[i];
-          addCommentToDom($('.comments'), comment, true)
-        }
-       },
-       error: function(err) {
+        },
+        error: function(err) {
               console.log(err);
               return
             }
@@ -124,19 +120,25 @@
         }
         $.ajax({
           type: 'POST',
-          url: 'http://localhost/hazel/week12/hw1/api_add_comments.php',
-          data: commentData
-        }).done(function(data){
-          if(!data.ok){
-            alert(data.message);
+          url: 'http://mentor-program.co/mtr04group5/hazel/week12/hw1/api_add_comments.php',
+          data: commentData,
+          success: function(data) {
+            if(!data.ok){
+              alert(data.message);
+              return
+            }
+            addCommentToDom($('.comments'), commentData, false)
+            $('input[name=nickname]').val('');
+            $('textarea[name=content]').val('');
+          },
+          error: function(err) {
+            console.log(err);
+            alert('發生錯誤，請稍後再試')
             return
           }
-          addCommentToDom($('.comments'), commentData, false)
-          $('input[name=nickname]').val('');
-          $('textarea[name=content]').val('');
-        })
-      })
-    })
+        });
+      });
+    });
 
   </script>
 </head>

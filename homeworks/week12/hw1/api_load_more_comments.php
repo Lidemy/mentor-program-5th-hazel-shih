@@ -6,7 +6,7 @@
   $limit = 5;
   $id = $_GET['id'];
 
-  $sql = 'SELECT * from discuss WHERE id < ? ORDER BY id DESC LIMIT ?';
+  $sql = 'SELECT * from hazel_w11_discuss WHERE id < ? ORDER BY id DESC LIMIT ?';
   $stmt = $conn -> prepare($sql);
   $stmt -> bind_param('ii', $id, $limit);
   $result = $stmt -> execute();

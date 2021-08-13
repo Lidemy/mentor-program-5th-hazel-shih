@@ -194,7 +194,7 @@
         let todosData = JSON.stringify(todosClone.html());
         $.ajax({
           type: 'POST',
-          url: 'http://localhost/hazel/week12/hw2/api_store_todo.php',
+          url: 'http://mentor-program.co/mtr04group5/hazel/week12/hw2/api_store_todo.php',
           data: {todosData},
           success: function(resp) {
             if(resp.todosID){
@@ -253,7 +253,7 @@
         function renderHasIDView(todosID){
           $.ajax({
             type: 'GET',
-            url: 'http://localhost/hazel/week12/hw2/api_display_store_todo.php',
+            url: 'http://mentor-program.co/mtr04group5/hazel/week12/hw2/api_display_store_todo.php',
             data: {todosID},
             success: function(resp) {
               $('.todos').empty();

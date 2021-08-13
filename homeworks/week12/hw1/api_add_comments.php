@@ -18,7 +18,7 @@
   $content = $_POST['content'];
   $site_key = $_POST['site_key'];
 
-  $sql = "INSERT INTO discuss (site_key, nickname, content) VALUES (?, ?, ?)";
+  $sql = "INSERT INTO hazel_w11_discuss (site_key, nickname, content) VALUES (?, ?, ?)";
   $stmt = $conn -> prepare($sql);
   $stmt -> bind_param('sss', $site_key, $nickname, $content);
   $result = $stmt -> execute();
