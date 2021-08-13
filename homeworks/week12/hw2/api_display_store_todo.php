@@ -15,7 +15,7 @@
 
   $todos_ID = $_GET['todosID'];
   
-  $sql = 'SELECT * FROM hazel_todo WHERE todos_id = ?';
+  $sql = 'SELECT * FROM `hazel_w12_todoList` WHERE todos_id = ?';
   $stmt = $conn -> prepare($sql);
   $stmt -> bind_param('s', $todos_ID);
   $result = $stmt -> execute();
