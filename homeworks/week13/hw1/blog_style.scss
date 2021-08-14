@@ -1,0 +1,442 @@
+@import '_variables';
+@import '_mixins';
+
+html {
+  @extend %none-space;
+}
+
+body {
+  @extend %none-space;
+}
+
+h1 {
+  @extend %none-space;
+}
+
+h2 {
+  @extend %none-space;
+}
+
+p {
+  @extend %none-space;
+}
+
+a {
+  @extend %none-default-deco;
+}
+
+body {
+  position: relative;
+}
+
+.top-bar {
+  @include flex(space-between);
+  width: 96%;
+  height: 70px;
+  background: white;
+  padding: 8px 18px;
+  box-sizing: border-box;
+  &__right {
+    @include flex(null);
+  }
+  &__left {
+    @include flex(null);
+  }
+  &__logo {
+    margin: 0;
+    font-family: $logo-font;
+    font-size: 40px;
+    font-weight: bold;
+    margin-left: 80px;
+    margin-right: 40px;
+    &__link {
+      color: $tag-blue;
+    }
+  }
+  &__nav {
+    &__link {
+      text-decoration: none;
+      color: $link-grey;
+      font-family: $primary-font;
+      margin-right: 30px;
+    }
+    &__hello {
+      color: $tag-blue;
+      font-weight: bold;
+      margin-right: 20px;
+    }
+  }
+}
+
+.top-banner {
+  width: 100%;
+  height: 150px;
+  background: $banner-color;
+  position: relative;
+  &__info {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  &__title {
+    @include title($tag-blue);
+  }
+  &__sub-title {
+    margin-top: 10px;
+    color: $tag-blue;
+  }
+}
+
+.middle {
+  display: flex;
+  flex-direction: column;
+  padding: 40px 100px 120px 100px;
+  position: relative;
+}
+
+.login {
+  border: solid 1px $tag-blue;
+  width: 30%;
+  margin: auto;
+  padding: 30px 40px 60px 40px;
+  text-align: center;
+  margin-top: 40px;
+  &__title {
+    color: $tag-blue;
+  }
+  &__input-div {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  &__input-btn {
+    margin-top: 40px;
+    color: white;
+    background: $tag-blue;
+    border: solid 1px $tag-blue;
+    padding: 10px 20px;
+    font-weight: bold;
+    @include hover-btn(white, $button-hover-blue)
+  }
+  &__input-label {
+    color: $tag-blue;
+    margin-bottom: 3px;
+  }
+}
+
+.article-list {
+  display: flex;
+  flex-direction: column;
+  padding: 40px 15% 150px 15%;
+  &-div {
+    @include flex(space-between);
+    border: solid 1px $tag-blue;
+    width: 100%;
+    padding: 12px 10px 12px 20px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    background: $background-color;
+  }
+  &__title {
+    @include title($tag-blue);
+    width: 70%;
+  }
+  &__info {
+    @include flex(null);
+    width: 30%;
+    margin-left: 20px;
+    &__time {
+      margin-right: 20px;
+      color: $tag-blue;
+    }
+    &__btn {
+      margin-right: 20px;
+      color: $tag-blue;
+      text-decoration: none;
+      border: solid 1px $tag-blue;
+      padding: 2px 6px;
+      white-space: nowrap;
+      @include hover-btn(white, $tag-blue)
+    }
+  }
+}
+
+.post-area {
+  display: flex;
+  flex-direction: column;
+  padding: 40px 20% 150px 20%;
+  position: relative;
+  &__writting {
+    border: solid 1px $text-dark-grey;
+    padding: 30px 30px 70px 30px;
+    position: relative;
+  }
+  &__title {
+    @include title($tag-blue);
+    margin-bottom: 20px;
+  }
+  &__form {
+    display: flex;
+    flex-direction: column;
+    &__block {
+      @include flex(null);
+      margin-bottom: 15px;
+    }
+    &__label {
+      font-weight: normal;
+      color: $tag-blue;
+      font-family: $primary-font;
+      font-size: 14px;
+      white-space: nowrap;
+      margin: 0;
+    }
+    &__input {
+      height: 16px;
+      width: 100%;
+      @include input-square;
+    }
+    &__select {
+      border-radius: 0;
+      background: $background-color;
+      padding: 3px;
+      border: none;
+      color: $tag-blue;
+      font-family: $primary-font;
+      width: 100%;
+    }
+    &__writting-area {
+      @include input-square;
+      margin-bottom: 20px;
+    }
+    &__btn {
+      position: absolute;
+      right: 30px;
+      bottom: 30px;
+      color: $tag-blue;
+      font-family: $primary-font;
+      background: white;
+      border: solid 1px $text-dark-grey;
+      padding: 5px 25px;
+      cursor: pointer;
+      @include hover-btn(white, $tag-blue)
+    }
+  }
+}
+
+.post {
+  &__first-row {
+    @include flex(space-between);
+  }
+  &-btns {
+    position: absolute;
+    top: 50px;
+    right: 10%;
+    &__btn {
+      text-decoration: none;
+      color: $tag-blue;
+      font-family: $primary-font;
+      border: solid 1px $tag-blue;
+      padding: 2px 6px;
+      &:nth-of-type(1){
+        margin-right: 15px;
+      }
+      @include hover-btn(white, $tag-blue)
+    }
+  }
+  &__title {
+    @include title($tag-blue);
+    font-size: 36px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  &-content {
+    white-space: pre-line;
+    color: $tag-blue;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+}
+
+.about-me {
+  @include flex(null);
+  flex-direction: column;
+  text-align: center;
+  width: 20%;
+  position: absolute;
+  top: 40px;
+  right: 100px;
+  &__avatar {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    padding: 0px;
+    background: url("./hazel.jpg") no-repeat center center;
+    background-size: 150px;
+    margin-bottom: 10px;
+  }
+  &_name {
+    margin-bottom: 8px;
+    color: $tag-blue;
+  }
+  &_text {
+    color: $tag-blue;
+    font-family: $primary-font;
+  }
+}
+
+.articles {
+  width: 70%;
+}
+
+.mark {
+  position: relative;
+  margin-bottom: 20px;
+  &__square {
+    display: inline-block;
+    padding: 5px 10px;
+    background: $tag-blue;
+    color: white;
+    font-family: $primary-font;
+  }
+  &__line {
+    width: 100%;
+    height: 1px;
+    background: $tag-blue;
+    position: absolute;
+    bottom: 0;
+  }
+}
+.article {
+  width: 100%;
+  display: flex;
+  position: relative;
+  margin-bottom: 45px;
+  &__img {
+    width: 35%;
+    height: 200px;
+  }
+  &__right-part {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  &__title {
+    @include title($tag-blue);
+    font-size: 22px;
+    text-decoration: none;
+  }
+  &__list-title {
+    @include title($tag-blue);
+    font-size: 22px;
+    text-decoration: none;
+    width: 70%;
+  }
+  &__info {
+    @include flex(null);
+    margin-top: 3px;
+    color: $tag-blue;
+    font-family: $primary-font;
+    font-size: 12px;
+    &__category {
+      padding: 2px 6px;
+      color: white;
+      background-color: $tag-blue;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    &__author {
+      margin-right: 10px;
+      font-weight: bold;
+    }
+    &__time {
+      color: $text-dark-grey;
+    }
+  }
+  &__content {
+    color: $text-dark-grey;
+    margin-top: 5px;
+    font-family: $primary-font;
+    font-weight:  lighter;
+    line-height: 20px;
+    overflow: hidden;
+    height: 100px;
+    margin-bottom: 8px;
+    word-break: break-all;
+  }
+  &__read-more {
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    width: 65px;
+    background: $warning-color;
+    @include title($tag-blue);
+    padding: 6px 12px;
+    border: solid 1px #222831;
+    font-size: 14px;
+    cursor: pointer;
+    display: block;
+    &:hover {
+      background: $lemon-yellow;
+    }
+  }
+}
+.self-introduce {
+  margin-top: 100px;
+  width: 100%;
+  border: solid 1px $text-light-grey;
+  display: flex;
+  padding: 20px;
+  box-sizing: border-box;
+  &__avatar {
+    width: 120px;
+    height: 120px;
+  }
+  &__intro {
+    margin-left: 20px;
+    color: $tag-blue;
+    font-family: $primary-font;
+    &__text {
+      font-weight: lighter;
+      margin-top: 5px;
+    }
+    &__social {
+      margin-top: 10px;
+      &__img {
+        width: 20px;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+.error {
+  font-size: 12px;
+  color: $error-color;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.page-system {
+  text-align: center;
+  margin-top: 70px;
+  &__link {
+    margin-right: 15px;
+    color: $tag-blue;
+    font-family: $primary-font;
+  }
+}
+.footer {
+  width: 100%;
+  height: 40px;
+  position: absolute;
+  bottom: 0;
+  background: $banner-color;
+  color: $tag-blue;
+  font-family: $primary-font;
+  @include flex(center);
+}
+
+
+

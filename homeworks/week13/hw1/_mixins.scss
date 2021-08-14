@@ -1,0 +1,34 @@
+%none-space {
+  margin: 0px;
+  padding: 0px;
+}
+
+%none-default-deco {
+  text-decoration: none;
+}
+
+@mixin input-square {
+  border-radius: 0;
+  border: solid 1px #818285;
+  padding: 3px;
+}
+
+@mixin title($font-color) {
+  color: $font-color;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: bold;
+}
+
+@mixin flex($jcindex){
+  display: flex;
+  justify-content: $jcindex;
+  align-items: center;
+}
+@mixin hover-btn($font-color, $background){
+  &:hover {
+    color: $font-color;
+    background: $background;
+    border: solid 1px $background;
+    cursor: pointer;
+  }
+}
