@@ -42,8 +42,6 @@
         .replace(/\//g, '&#x2F');
     }
 
-
-
     function addCommentToDom(parentNode, comment, isAppend){
       var cardContent = `
         <div class="card">
@@ -60,56 +58,54 @@
       return
     }
 
-    $(document).ready(() => {
-      //一開始先載入最新的五則留言
+    function getCommentAPI(siteKey, lastID, cb){
+      let url = `http://mentor-program.co/mtr04group5/hazel/week12/hw1/api_comments.php?site_key=${siteKey}`;
+      if(lastID){
+        url += `&lastID=${lastID}`;
+      }
       $.ajax({
         type: 'GET',
-        url: "http://mentor-program.co/mtr04group5/hazel/week12/hw1/api_comments.php?site_key=hazel",
+        url: url,
         success: function(data) {
           if(!data.ok){
             alert(data.message);
             return
           }
-          const comments = data.discussions;
-          if(comments.length === 0) return;
-          
-          var lastCommentID = comments[comments.length - 1].id;
-          for(let i = 0; i < comments.length; i++){
-            addCommentToDom($('.comments'), comments[i], true)
-          }
-          //載入更多留言
-          if(comments.length === 5) {
-            $('.container').append('<button type="button" class="load-more btn btn-info">載入更多</button>');
-            $('.load-more').click(e => {
-              $.ajax({
-                type: 'GET',
-                url: `http://mentor-program.co/mtr04group5/hazel/week12/hw1/api_load_more_comments.php`,
-                data: `id=${lastCommentID}`,
-                success: function(data) {
-                  let moreComments = data.discussions;
-                  if(moreComments.length === 0 || moreComments.length < 5){
-                    $('.load-more').addClass('hide');
-                    $('.container').append('<div class="alert alert-info" role="alert">已經沒有更多留言嚕！</div>')
-                  }
-                  for(let i = 0; i < moreComments.length; i++){
-                    addCommentToDom($('.comments'), moreComments[i], true)
-                  }
-                  if(moreComments.length !== 0) lastCommentID = moreComments[moreComments.length - 1].id;
-                },
-                error: function(error) {
-                  alert('伺服器錯誤，請稍後再試')
-                  console.log(error);
-                  return
-                }
-              });
-            });
-          }
+          cb(data);
         },
         error: function(err) {
+              alert('伺服器發生錯誤，請稍後再試')
               console.log(err);
               return
             }
+      });    
+    }
+
+    function getComments(){
+      getCommentAPI(siteKey, lastID, function(data){
+        const comments = data.discussions;
+        if(comments.length < commentPerPage) {
+          $('.load-more').remove();
+          if(comments.length === 0) return;
+        }
+        lastID = comments[comments.length - 1].id;
+        for(let i = 0; i < comments.length; i++){
+          addCommentToDom($('.comments'), comments[i], true)
+        }
       });
+    }
+    var commentPerPage = 5;
+    var siteKey = 'hazel';
+    var lastID = null;
+    var loadMoreBtnHTML = '<button type="button" class="load-more btn btn-info">載入更多</button>';
+    $(document).ready(() => {
+      //一開始先載入最新的五則留言
+      getComments();
+      $('.container').append(loadMoreBtnHTML);
+      //載入更多留言
+      $('.container').on('click', '.load-more', function(){
+        getComments();
+      })
 
       $('.add-comment-form').submit(e => {
         e.preventDefault();

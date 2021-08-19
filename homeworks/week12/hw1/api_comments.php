@@ -17,9 +17,16 @@
   $site_key = $_GET['site_key'];
   $comment_per_page = 5;
 
-  $sql = "SELECT id, nickname, content, created_at FROM hazel_w11_discuss WHERE site_key = ? ORDER BY id DESC LIMIT ?";
+  $sql = "SELECT id, nickname, content, created_at FROM hazel_w11_discuss WHERE site_key = ? " .
+  (empty($_GET['lastID']) ? "" : "and id < ? ") .
+  "ORDER BY id DESC LIMIT ?";
   $stmt = $conn -> prepare($sql);
-  $stmt -> bind_param('ss', $site_key, $comment_per_page);
+  if(empty($_GET['lastID'])){
+    $stmt -> bind_param('si', $site_key, $comment_per_page);
+  } else {
+    $stmt -> bind_param('sii', $site_key, $_GET['lastID'], $comment_per_page);
+  }
+  
   $result = $stmt -> execute();
 
   if(!$result){
