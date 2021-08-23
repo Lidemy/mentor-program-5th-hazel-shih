@@ -6,163 +6,26 @@
   <title>留言板</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="./dist/main.js"></script>
+  <script>
+    $(document).ready(() => {
+      commentPlugin.init({
+        siteKey: "hazel",
+        apiUrl: "http://mentor-program.co/mtr04group5/hazel/week13/hw2/",
+        containerClassName: "hazel-container",
+      });
+      commentPlugin.init({
+        siteKey: "pikachu",
+        apiUrl: "http://mentor-program.co/mtr04group5/hazel/week13/hw2/",
+        containerClassName: "pikachu-container",
+      });
+    });
+  </script>
   <style>
   </style>
-  <script>
-    const formTemplate = `
-    <form class="add-comment-form" method="POST">
-      <div class="mb-3">
-        <label for="nickname-text" class="form-label">暱稱：</label>
-        <input type="text" class="form-control" name="nickname">
-        <div class="form-text"></div>
-      </div>
-      <div class="mb-3">
-        <label for="content-text" class="form-label">留言內容：</label>
-        <textarea class="form-control" name="content"></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary">送出</button>
-      <div class="comments"></div>
-    </form>`
-    var siteKey = '';
-    var apiUrl = '';
-    var containerElement = null;
 
-    var commentPerPage = 5;
-    var lastID = null;
-    var loadMoreBtnHTML = '<button type="button" class="load-more btn btn-info">載入更多</button>';
-
-    function init(params){
-      siteKey = params.siteKey;
-      apiUrl = params.apiUrl;
-      containerElement = $(params.containerElement);
-      containerElement.append(formTemplate);
-      //為 tag 動態加入 CSS
-      let cssElements = [    
-      '.container { padding: 20px; }',
-      '.card { margin-top: 15px; }',
-      '.load-more { margin-top: 20px; }',
-      '.load-more__link { text-decoration: none; color: black;}']
-      for(let i = 0; i < cssElements.length; i++) {
-        addCSStoHTMLtag(cssElements[i]);
-      }
-      //一開始先載入最新的五則留言
-      getComments();
-      $('.container').append(loadMoreBtnHTML);
-      //載入更多留言
-      $('.container').on('click', '.load-more', function(){
-        getComments();
-      })
-      //新增留言
-      $('.add-comment-form').submit(e => {
-        e.preventDefault();
-        const commentData = {
-          site_key: siteKey,
-          nickname: $('input[name=nickname]').val(),
-          content: $('textarea[name=content]').val()
-        }
-        $.ajax({
-          type: 'POST',
-          url: `${apiUrl}api_add_comments.php`,
-          data: commentData,
-          success: function(data) {
-            if(!data.ok){
-              alert(data.message);
-              return
-            }
-            addCommentToDom($('.comments'), commentData, false)
-            $('input[name=nickname]').val('');
-            $('textarea[name=content]').val('');
-          },
-          error: function(err) {
-            console.log(err);
-            alert('發生錯誤，請稍後再試')
-            return
-          }
-        });
-      });
-    }
-
-    $(document).ready(()=>{
-      init({
-        siteKey: 'hazel',
-        apiUrl: 'http://mentor-program.co/mtr04group5/hazel/week13/hw2/',
-        containerElement: '.container'
-      })
-    })
-
-    function addCSStoHTMLtag(cssStr){
-      var style = document.createElement('style');
-      document.head.appendChild(style);
-      style.sheet.insertRule(cssStr);
-    }
-
-    function escape(str){
-    return str.replace(/\&/g, '&amp;')
-        .replace(/\</g, '&lt;')
-        .replace(/\>/g, '&gt;')
-        .replace(/\"/g, '&quot;')
-        .replace(/\'/g, '&#x27')
-        .replace(/\//g, '&#x2F');
-    }
-
-    function addCommentToDom(parentNode, comment, isAppend){
-      var cardContent = `
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">${escape(comment.nickname)}</h5>
-            <p class="card-text">${escape(comment.content)}</p>
-          </div>
-        </div>`
-      if(isAppend){
-        parentNode.append(cardContent)
-        return
-      }
-      parentNode.prepend(cardContent)
-      return
-    }
-
-    function getCommentAPI(apiUrl, siteKey, lastID, cb){
-      let url = `${apiUrl}api_comments.php?site_key=${siteKey}`;
-      if(lastID){
-        url += `&lastID=${lastID}`;
-      }
-      
-      $.ajax({
-        type: 'GET',
-        url: url,
-        success: function(data) {
-          if(!data.ok){
-            alert(data.message);
-            return
-          }
-          cb(data);
-        },
-        error: function(err) {
-              alert('伺服器發生錯誤，請稍後再試')
-              console.log(err);
-              return
-            }
-      });    
-    }
-
-    function getComments(){
-      getCommentAPI(apiUrl, siteKey, lastID, function(data){
-        const comments = data.discussions;
-        if(comments.length < commentPerPage) {
-          $('.load-more').remove();
-          if(comments.length === 0) return;
-        }
-        lastID = comments[comments.length - 1].id;
-        for(let i = 0; i < comments.length; i++){
-          addCommentToDom($('.comments'), comments[i], true)
-        }
-      });
-    }
-
-  </script>
 </head>
 <body>
-  <div class="container"></div>
   
 </body>
 </html>
