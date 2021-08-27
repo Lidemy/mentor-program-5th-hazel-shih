@@ -40,18 +40,22 @@
       let streamDivNum = 0;
       let streamIsEnd = false;
       //取得前五名熱門遊戲名單
-      let topGameNamesJson = await makeRequest(`${topGamesApiUrl}?limit=${topGamesNum}`);
-      for(let topGameData of topGameNamesJson.top){
-        topGameNames.push(topGameData.game.name);
-      }
-      //更改 Nav Bar 資訊
-      let navBarLinks = $('.navbar__game');
-      for(let i = 0; i < navBarLinks.length; i++) {
-        navBarLinks[i].innerText = topGameNames[i]
+      try {
+        let topGameNamesJson = await makeRequest(`${topGamesApiUrl}?limit=${topGamesNum}`);
+        for(let topGameData of topGameNamesJson.top){
+          topGameNames.push(topGameData.game.name);
+        }
+        //更改 Nav Bar 資訊
+        let navBarLinks = $('.navbar__game');
+        for(let i = 0; i < navBarLinks.length; i++) {
+          navBarLinks[i].innerText = topGameNames[i]
+        }
+      } catch(err) {
+        console.log('Cannot get top games data! ', err);
       }
       //取得串流影片
       topGameNamesEncoded = topGameNames.map(e => encodeURIComponent(e));
-      displaySteams(0)
+      displaySteams(0);
       $('.navbar__top-games').click(async e => {
         let gameBtns = $('.navbar__game');
         switch(e.target){
@@ -84,30 +88,44 @@
       })
       //載入更多
       setLoadMoreBtn();
-
+      //functions
+      async function displaySteams(chosenGameIndex, offset){
+        try {
+          let topGameStreamsJson = await getTopGameStreamJson(topGameNamesEncoded[chosenGameIndex], offset);
+          let topGameStreamsArr = createStreamData(topGameStreamsJson);
+          if(topGameStreamsArr.length < streamsNum) streamIsEnd = true;
+          if(offset) {
+            createDisplayDivAndAppend(topGameStreamsArr);
+            return
+          }
+          $('.streams').empty();
+          createDisplayDivAndAppend(topGameStreamsArr);
+        } catch(err) {
+          console.log('Cannot get top game streams data! ', err);
+        }
+      }
+      function makeRequest(url){
+        return fetch(url, {
+          method: 'GET',
+          headers: headers
+        }).then(response => {
+          if(response.status >= 200 && response.status < 400 && response.ok) {
+            return response.json();
+          } else {
+            return Promise.reject('Error occurred!');
+          }
+        });
+      }
       function setLoadMoreBtn(){
         $('.watch-more__btn').click(() => {
           if(streamIsEnd) {
             document.querySelector('.watch-more__btn').outerHTML = `<p class="no-more-results">No  More  Results</p>`;
-            return
+            return;
           } else {
             displaySteams(chosenGameIndex, streamDivNum);
           }
         })
       }
-
-      async function displaySteams(chosenGameIndex, offset){
-        let topGameStreamsJson = await getTopGameStreamJson(topGameNamesEncoded[chosenGameIndex], offset);
-        let topGameStreamsArr = createStreamData(topGameStreamsJson);
-        if(topGameStreamsArr.length < streamsNum) streamIsEnd = true;
-        if(offset) {
-          createDisplayDivAndAppend(topGameStreamsArr);
-          return
-        }
-        $('.streams').empty();
-        createDisplayDivAndAppend(topGameStreamsArr);
-      }
-
       function reset(){
         if(streamIsEnd){ 
           document.querySelector('.no-more-results').outerHTML = `<button class="watch-more__btn">Watch  More ...</button>`;
@@ -117,18 +135,15 @@
         streamDivNum = 0;
         window.scrollTo(0, 0);
       }
-
       function getTopGameStreamJson(gameNameEncoded, offset){
         let apiUrl = `${streamsApiUrl}?limit=${streamsNum}&game=${gameNameEncoded}`;
         if(offset) apiUrl += `&offset=${offset}`
-        return makeRequest(apiUrl)
+        return makeRequest(apiUrl);
       }
-
-      //函式：建立新的一批串流影片 Div
       function createDisplayDivAndAppend(streamsData){
         for(let i = 0; i < streamsData.length; i++){
-          let block = document.createElement('div')
-          block.classList.add('stream__block')
+          let block = document.createElement('div');
+          block.classList.add('stream__block');
           block.innerHTML = `
           <div class="stream__preview"></div>
           <div class="stream__info">
@@ -137,51 +152,32 @@
               <div class="stream__game"></div>
               <div class="stream__display-name"></div>
               <div class="stream__viewers"></div>
-          </div>`
-          block.setAttribute('onclick', `window.open('${streamsData[i].url}')`)
+          </div>`;
+          block.setAttribute('onclick', `window.open('${streamsData[i].url}')`);
           block.querySelector('.stream__preview').style.background = `url('${streamsData[i].previewImage}') no-repeat center center`;
           block.querySelector('.stream__info .stream__logo').style.background = `url('${streamsData[i].logo}') no-repeat center center / contain`;
           block.querySelector('.stream__info .stream__content .stream__game').innerText = streamsData[i].gameName;
           block.querySelector('.stream__info .stream__content .stream__display-name').innerText = streamsData[i].displayName;
           block.querySelector('.stream__info .stream__content .stream__viewers').innerText = `${streamsData[i].viewers} viewers`;
-          let streamsSection = document.querySelector('.streams')
-          streamsSection.appendChild(block)
+          let streamsSection = document.querySelector('.streams');
+          streamsSection.appendChild(block);
         }
         streamDivNum = $('.stream__block').length;
       }
-
-
-      //函式：整理 response 的資料，並取得其中所需的部分建立陣列
       function createStreamData(jsonData) {
-        let dataOfStreams = []
+        let dataOfStreams = [];
         for(let i = 0; i < jsonData.streams.length; i++) {
-          let eachStreamData = {}
-          eachStreamData['previewImage'] = jsonData.streams[i].preview.large
-          eachStreamData['logo'] = jsonData.streams[i].channel.logo
-          eachStreamData['gameName'] = jsonData.streams[i].channel.status
-          eachStreamData['displayName'] = jsonData.streams[i].channel.display_name
-          eachStreamData['viewers'] = jsonData.streams[i].viewers
-          eachStreamData['url'] = jsonData.streams[i].channel.url
-          eachStreamData['id'] = jsonData.streams[i]._id
-          dataOfStreams.push(eachStreamData)
-        }
-        return dataOfStreams
-      }
-
-      function makeRequest(url){
-        return fetch(url, {
-          method: 'GET',
-          headers: headers
-        }).then(response => {
-          if(response.status >= 200 && response.status < 400 && response.ok) {
-            return response.json();
-          } else {
-            return Promise.reject('Error occurred!')
-          }
-        }).catch(err => {
-          console.log(`Error occurred on API:${url}, the error message is:${err}`);
-          alert('發生錯誤，請稍後再試');
-        })
+          let eachStreamData = {};
+          eachStreamData['previewImage'] = jsonData.streams[i].preview.large;
+          eachStreamData['logo'] = jsonData.streams[i].channel.logo;
+          eachStreamData['gameName'] = jsonData.streams[i].channel.status;
+          eachStreamData['displayName'] = jsonData.streams[i].channel.display_name;
+          eachStreamData['viewers'] = jsonData.streams[i].viewers;
+          eachStreamData['url'] = jsonData.streams[i].channel.url;
+          eachStreamData['id'] = jsonData.streams[i]._id;
+          dataOfStreams.push(eachStreamData);
+        };
+        return dataOfStreams;
       }
     })  
 
