@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Streams of Top 5 Games</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Odibee+Sans&family=Roboto+Condensed:wght@400;700&family=Squada+One&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <nav class="navbar__top-games">
+    <a class="navbar__game"></a>
+    <a class="navbar__game"></a>
+    <a class="navbar__game"></a>
+    <a class="navbar__game"></a>
+    <a class="navbar__game"></a>
+  </nav>
+  <section class="streams"></section>
+    <div class="watch-more__block"><button class="watch-more__btn">Watch  More ...</button></div>
+  <script>
+    $(document).ready(async () => {
+      const clientID = '5h0cpu5wohpm88atbxwccndu8uzwrr';
+      const headers = new Headers({
+        'Client-ID': clientID,
+        'Accept': 'application/vnd.twitchtv.v5+json'
+        });
+      const topGamesApiUrl = 'https://api.twitch.tv/kraken/games/top';
+      const streamsApiUrl = 'https://api.twitch.tv/kraken/streams';
+      let topGameNames = [];
+      let topGameNamesEncoded = [];
+      let topGamesNum = 5;
+      let streamsNum = 20;
+      let chosenGameIndex = 0;
+      let streamDivNum = 0;
+      let streamIsEnd = false;
+      //取得前五名熱門遊戲名單
+      try {
+        let topGameNamesJson = await makeRequest(`${topGamesApiUrl}?limit=${topGamesNum}`);
+        for(let topGameData of topGameNamesJson.top){
+          topGameNames.push(topGameData.game.name);
+        }
+        //更改 Nav Bar 資訊
+        let navBarLinks = $('.navbar__game');
+        for(let i = 0; i < navBarLinks.length; i++) {
+          navBarLinks[i].innerText = topGameNames[i]
+        }
+      } catch(err) {
+        console.log('Cannot get top games data! ', err);
+      }
+      //取得串流影片
+      topGameNamesEncoded = topGameNames.map(e => encodeURIComponent(e));
+      displaySteams(0);
+      $('.navbar__top-games').click(async e => {
+        let gameBtns = $('.navbar__game');
+        switch(e.target){
+          case gameBtns[0]:
+            reset();
+            chosenGameIndex = 0;
+            displaySteams(chosenGameIndex)
+            break
+          case gameBtns[1]:
+            reset();
+            chosenGameIndex = 1;
+            displaySteams(chosenGameIndex)
+            break
+          case gameBtns[2]:
+            reset();
+            chosenGameIndex = 2;
+            displaySteams(chosenGameIndex)
+            break
+          case gameBtns[3]:
+            reset();
+            chosenGameIndex = 3;
+            displaySteams(chosenGameIndex)
+            break
+          case gameBtns[4]:
+            reset();
+            chosenGameIndex = 4;
+            displaySteams(chosenGameIndex)
+            break
+        }
+      })
+      //載入更多
+      setLoadMoreBtn();
+      //functions
+      async function displaySteams(chosenGameIndex, offset){
+        try {
+          let topGameStreamsJson = await getTopGameStreamJson(topGameNamesEncoded[chosenGameIndex], offset);
+          let topGameStreamsArr = createStreamData(topGameStreamsJson);
+          if(topGameStreamsArr.length < streamsNum) streamIsEnd = true;
+          if(offset) {
+            createDisplayDivAndAppend(topGameStreamsArr);
+            return
+          }
+          $('.streams').empty();
+          createDisplayDivAndAppend(topGameStreamsArr);
+        } catch(err) {
+          console.log('Cannot get top game streams data! ', err);
+        }
+      }
+      function makeRequest(url){
+        return fetch(url, {
+          method: 'GET',
+          headers: headers
+        }).then(response => {
+          if(response.status >= 200 && response.status < 400 && response.ok) {
+            return response.json();
+          } else {
+            return Promise.reject('Error occurred!');
+          }
+        });
+      }
+      function setLoadMoreBtn(){
+        $('.watch-more__btn').click(() => {
+          if(streamIsEnd) {
+            document.querySelector('.watch-more__btn').outerHTML = `<p class="no-more-results">No  More  Results</p>`;
+            return;
+          } else {
+            displaySteams(chosenGameIndex, streamDivNum);
+          }
+        })
+      }
+      function reset(){
+        if(streamIsEnd){ 
+          document.querySelector('.no-more-results').outerHTML = `<button class="watch-more__btn">Watch  More ...</button>`;
+          setLoadMoreBtn();
+        }
+        streamIsEnd = false;
+        streamDivNum = 0;
+        window.scrollTo(0, 0);
+      }
+      function getTopGameStreamJson(gameNameEncoded, offset){
+        let apiUrl = `${streamsApiUrl}?limit=${streamsNum}&game=${gameNameEncoded}`;
+        if(offset) apiUrl += `&offset=${offset}`
+        return makeRequest(apiUrl);
+      }
+      function createDisplayDivAndAppend(streamsData){
+        for(let i = 0; i < streamsData.length; i++){
+          let block = document.createElement('div');
+          block.classList.add('stream__block');
+          block.innerHTML = `
+          <div class="stream__preview"></div>
+          <div class="stream__info">
+            <div class="stream__logo"></div>
+            <div class="stream__content">
+              <div class="stream__game"></div>
+              <div class="stream__display-name"></div>
+              <div class="stream__viewers"></div>
+          </div>`;
+          block.setAttribute('onclick', `window.open('${streamsData[i].url}')`);
+          block.querySelector('.stream__preview').style.background = `url('${streamsData[i].previewImage}') no-repeat center center`;
+          block.querySelector('.stream__info .stream__logo').style.background = `url('${streamsData[i].logo}') no-repeat center center / contain`;
+          block.querySelector('.stream__info .stream__content .stream__game').innerText = streamsData[i].gameName;
+          block.querySelector('.stream__info .stream__content .stream__display-name').innerText = streamsData[i].displayName;
+          block.querySelector('.stream__info .stream__content .stream__viewers').innerText = `${streamsData[i].viewers} viewers`;
+          let streamsSection = document.querySelector('.streams');
+          streamsSection.appendChild(block);
+        }
+        streamDivNum = $('.stream__block').length;
+      }
+      function createStreamData(jsonData) {
+        let dataOfStreams = [];
+        for(let i = 0; i < jsonData.streams.length; i++) {
+          let eachStreamData = {};
+          eachStreamData['previewImage'] = jsonData.streams[i].preview.large;
+          eachStreamData['logo'] = jsonData.streams[i].channel.logo;
+          eachStreamData['gameName'] = jsonData.streams[i].channel.status;
+          eachStreamData['displayName'] = jsonData.streams[i].channel.display_name;
+          eachStreamData['viewers'] = jsonData.streams[i].viewers;
+          eachStreamData['url'] = jsonData.streams[i].channel.url;
+          eachStreamData['id'] = jsonData.streams[i]._id;
+          dataOfStreams.push(eachStreamData);
+        };
+        return dataOfStreams;
+      }
+    })  
+
+  </script>
+</body>
+</html>
