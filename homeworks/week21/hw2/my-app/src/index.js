@@ -105,7 +105,7 @@ function Game() {
       check(board, currentX, currentY, currentColor, back, back),
     ];
     results.find((result) => result === 4) && (whoIsWinner = currentColor);
-    setWinner(whoIsWinner);
+    whoIsWinner && setWinner(whoIsWinner);
   }, []);
 
   function handleClick(x, y) {
