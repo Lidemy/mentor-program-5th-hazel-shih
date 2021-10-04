@@ -21,6 +21,37 @@ function Square({ x, y, children }) {
   );
 }
 
+function Board({ board }) {
+  return (
+    <>
+      {board.map((row, rowIndex) => {
+        return (
+          <div key={rowIndex}>
+            {row.map((square, squareIndex) => (
+              <Square x={squareIndex} y={rowIndex} key={squareIndex}>
+                {square}
+              </Square>
+            ))}
+            <br />
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
+function Title({ thisTurnIsBlack, winner }) {
+  return (
+    <div className="status">
+      {winner
+        ? "遊戲結束嚕 🏁"
+        : thisTurnIsBlack
+        ? "換黑棋下 🏴️"
+        : "換白棋下 🏳️"}
+    </div>
+  );
+}
+
 const fixed = [0, 0, 0, 0];
 const add = [1, 2, 3, 4];
 const back = [-1, -2, -3, -4];
@@ -103,43 +134,12 @@ function Game() {
     setWinner(null);
   }, []);
 
-  function Title({ thisTurnIsBlack, winner }) {
-    return (
-      <div className="status">
-        {winner
-          ? "遊戲結束嚕 🏁"
-          : thisTurnIsBlack
-          ? "換黑棋下 🏴️"
-          : "換白棋下 🏳️"}
-      </div>
-    );
-  }
-
-  function Board() {
-    return (
-      <>
-        {board.map((row, rowIndex) => {
-          return (
-            <div key={rowIndex}>
-              {row.map((square, squareIndex) => (
-                <Square x={squareIndex} y={rowIndex} key={squareIndex}>
-                  {square}
-                </Square>
-              ))}
-              <br />
-            </div>
-          );
-        })}
-      </>
-    );
-  }
-
   return (
     <div className="game">
       <div className="game-board">
         <Title thisTurnIsBlack={thisTurnIsBlack} winner={winner} />
         <BoardContext.Provider value={{ handleClick, thisTurnIsBlack, winner }}>
-          <Board />
+          <Board board={board} />
         </BoardContext.Provider>
       </div>
       <div className="game-info">
