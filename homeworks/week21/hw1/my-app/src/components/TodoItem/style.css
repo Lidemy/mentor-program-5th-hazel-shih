@@ -1,0 +1,69 @@
+
+/* .task-block {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 3%;
+  border-radius: 10px;
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  align-items: center;
+} */
+
+/* .task-block:last-child {
+  margin-bottom: 30px;
+} */
+
+/* .task-block:hover {
+  background: #DDE6FA;
+  transition: background 0.2s;
+} */
+
+/* .task-block__checked {
+  filter: opacity(25%);
+} */
+
+/* .check-box {
+  min-width: 18px;
+  min-height: 18px;
+  border: 1px solid #3B66C3;
+  border-radius: 1px;
+  cursor: pointer;
+}
+
+.check-box:hover {
+  box-shadow: 0 0 2px 1px #3B66C3;
+} */
+
+/* .checked {
+  background-image: url('../../img/checked.png');
+  background-size: contain;
+} */
+
+/* .task-name {
+  width: 100%;
+  color: #2B3B54;
+  font-size: 16px;
+  text-align: left;
+  overflow-wrap: anywhere;
+} */
+
+/* .delete {
+  min-width: 22px;
+  min-height: 22px;
+  background-image: url('../../img/delete.png');
+  filter: opacity(40%);
+  background-size: cover;
+  cursor: pointer;
+} */
+
+/* .delete:hover {
+  filter: none;
+} */
+
+
+/* .checked {
+  background-image: url('../../img/checked.png');
+  background-size: contain;
+} */

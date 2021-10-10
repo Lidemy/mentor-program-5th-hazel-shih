@@ -1,0 +1,55 @@
+const questions = [
+  {
+    question: "暱稱",
+    name: "name",
+    type: "text",
+    placeholder: "您的回答",
+    content: "",
+    required: true,
+  },
+  {
+    name: "email",
+    question: "電子郵件",
+    type: "email",
+    pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$",
+    placeholder: "您的電子郵件",
+    content: "",
+    required: true,
+  },
+  {
+    question: "手機號碼",
+    name: "phone",
+    type: "tel",
+    pattern: "[0-9]{10}",
+    placeholder: "您的手機號碼",
+    content: "",
+    required: true,
+  },
+  {
+    question: "報名類型",
+    type: "radio",
+    name: "SignUpType",
+    choices: ["躺在床上用想像力實作", "趴在地上滑手機找現成的"],
+    content: "",
+    required: true,
+  },
+  {
+    name: "howToKnow",
+    question: "怎麼知道這個活動的？",
+    type: "text",
+    placeholder: "您的回答",
+    content: "",
+    required: true,
+  },
+  {
+    name: "other",
+    question: "其他",
+    type: "text",
+    placeholder: "您的回答",
+    content: "",
+    explain: "對活動的一些建議",
+    required: false,
+  },
+];
+
+export default questions;
