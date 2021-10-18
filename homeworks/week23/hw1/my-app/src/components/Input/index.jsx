@@ -1,17 +1,44 @@
-import React from "react";
-import "./style.css";
-import useInput from "../../hooks/useInput";
+import React, { useState, useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../../redux/actions";
+import styled from "styled-components";
 
-function Input({ createTask }) {
-  const { input, handleInputChange, handleKeyPress } = useInput();
+const InputStyle = styled.input`
+  border: 1px solid #93aae9;
+  border-radius: 4px;
+  height: 50px;
+  width: 100%;
+  margin-bottom: 25px;
+  padding: 0 2%;
+  font-size: 16px;
+  color: #2b3b54;
+`;
+
+function Input() {
+  const [input, setInput] = useState("");
+  const dispatch = useDispatch();
+
+  const handleInputChange = (e) => {
+    const { value } = e.target;
+    setInput(value);
+  };
+
+  const handleKeyPress = useCallback(
+    (e) => {
+      if (input === "") return;
+      if (e.key === "Enter") {
+        dispatch(addTodo(input));
+        setInput("");
+      }
+    },
+    [dispatch, input]
+  );
+
   return (
-    <input
+    <InputStyle
       type="text"
-      className="create-task"
       onChange={handleInputChange}
-      onKeyPress={(e) => {
-        handleKeyPress(e, input, createTask);
-      }}
+      onKeyPress={handleKeyPress}
       value={input}
       autoFocus
     />

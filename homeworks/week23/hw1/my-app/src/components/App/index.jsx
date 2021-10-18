@@ -1,9 +1,11 @@
-import { createContext, useState } from "react";
 import styled from "styled-components";
 import Todos from "../Todos";
 import Input from "../Input";
 import Filter from "../Filter";
-import useTodos from "../../hooks/useTodos";
+import React, { useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getTodos } from "../../redux/selectors";
+import { deleteAllTodo } from "../../redux/actions";
 
 const Wrapper = styled.div`
   padding: 50px 30% 50px 30%;
@@ -42,48 +44,22 @@ const Title = styled.h1`
   margin-bottom: 15px;
 `;
 
-const TodoItemFunctionContext = createContext();
-const FilterButtonContext = createContext();
 function App() {
-  const {
-    todos,
-    createTask,
-    handleDelete,
-    handleToggleIsDone,
-    handleDeleteAll,
-    handleEditContent,
-  } = useTodos();
+  const todos = useSelector(getTodos);
+  const dispatch = useDispatch();
 
-  const [filter, setFilter] = useState("all");
+  const handleClick = useCallback(() => dispatch(deleteAllTodo()), [dispatch]);
 
   return (
-    <Wrapper className="todo-list">
-      <Section
-        style={{ paddingBottom: todos.length !== 0 ? "60px" : "35px" }}
-        className="wrapper"
-      >
-        <Title className="title">TODO LIST</Title>
-        <Input createTask={createTask} />
-        <FilterButtonContext.Provider value={{ filter, setFilter }}>
-          <Filter show={todos.length !== 0} />
-        </FilterButtonContext.Provider>
-
-        <div>
-          <TodoItemFunctionContext.Provider
-            value={{
-              todos,
-              handleDelete,
-              handleToggleIsDone,
-              handleEditContent,
-            }}
-          >
-            <Todos todosData={todos} showData={filter} />
-          </TodoItemFunctionContext.Provider>
-        </div>
+    <Wrapper>
+      <Section style={{ paddingBottom: todos.length !== 0 ? "60px" : "35px" }}>
+        <Title>TODO LIST</Title>
+        <Input />
+        <Filter show={todos.length !== 0} />
+        <Todos />
         <DeleteBtn
           style={todos.length !== 0 ? {} : { display: "none" }}
-          onClick={handleDeleteAll}
-          className="delete-all"
+          onClick={handleClick}
         >
           Delete All
         </DeleteBtn>
@@ -93,5 +69,3 @@ function App() {
 }
 
 export default App;
-export { TodoItemFunctionContext };
-export { FilterButtonContext };

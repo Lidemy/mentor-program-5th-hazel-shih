@@ -1,13 +1,12 @@
-import { useContext } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import deleteIMG from "../../img/delete.png";
 import checkedIMG from "../../img/checked.png";
 import editIMG from "../../img/edit.png";
 import checkIMG from "../../img/check.png";
 import cancelIMG from "../../img/close.png";
-import "./style.css";
-import useEdit from "../../hooks/useEdit";
-import { TodoItemFunctionContext } from "../App";
+import { useDispatch } from "react-redux";
+import { toggleTodo, editTodo, deleteTodo } from "../../redux/actions";
 
 const TaskBlock = styled.div`
   width: 100%;
@@ -19,10 +18,7 @@ const TaskBlock = styled.div`
   justify-content: space-between;
   position: relative;
   align-items: center;
-
-  &:last-child {
-    margin-bottom: 30px;
-  }
+  margin-bottom: 20px;
 
   &:hover {
     background: #dde6fa;
@@ -106,26 +102,48 @@ const EditInput = styled.input`
 `;
 
 function TodoItem({ todo }) {
-  const { handleDelete, handleToggleIsDone, handleEditContent } = useContext(
-    TodoItemFunctionContext
+  const [editing, setEditing] = useState(false);
+  const [editContent, setEditContent] = useState(todo.content);
+  const dispatch = useDispatch();
+
+  const handleToggleIsDone = useCallback(
+    (id) => dispatch(toggleTodo(id)),
+    [dispatch]
   );
 
-  const {
-    editing,
-    editContent,
-    handleCheck,
-    handleEdit,
-    handleCancel,
-    handleChangeInput,
-    handleFinish,
-  } = useEdit(todo);
+  function handleEdit() {
+    setEditing((editing) => !editing);
+  }
+
+  function handleCancel() {
+    setEditing((editing) => !editing);
+    setEditContent(todo.content);
+  }
+
+  function handleChangeInput(e) {
+    const { value } = e.target;
+    setEditContent(value);
+  }
+
+  const handleFinish = useCallback(
+    (id, newContent) => {
+      setEditing((editing) => !editing);
+      if (newContent === "") return;
+      dispatch(editTodo(id, newContent));
+    },
+    [dispatch]
+  );
+
+  const handleDelete = useCallback(
+    (id) => dispatch(deleteTodo(id)),
+    [dispatch]
+  );
 
   return (
     <TaskBlock isDone={todo.isDone}>
       <CheckBox
         isDone={todo.isDone}
         onClick={() => {
-          handleCheck();
           handleToggleIsDone(todo.id);
         }}
       />
@@ -136,7 +154,7 @@ function TodoItem({ todo }) {
         onChange={handleChangeInput}
       />
       <Finish
-        onClick={() => handleFinish(handleEditContent, todo.id, editContent)}
+        onClick={() => handleFinish(todo.id, editContent)}
         editing={editing}
       />
       <Cancel onClick={handleCancel} editing={editing} />

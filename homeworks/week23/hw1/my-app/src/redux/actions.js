@@ -4,16 +4,14 @@ import {
   EDIT_TODO,
   DELETE_ALL,
   TOGGLE_TODO,
+  SET_FILTER,
 } from "./actionType";
-import { nanoid } from "nanoid";
 
 export function addTodo(content) {
   return {
     type: ADD_TODO,
     payload: {
-      id: nanoid(),
       content,
-      isDone: false,
     },
   };
 }
@@ -49,5 +47,14 @@ export function toggleTodo(id) {
 export function deleteAllTodo() {
   return {
     type: DELETE_ALL,
+  };
+}
+
+export function setFilter(newFilter) {
+  return {
+    type: SET_FILTER,
+    payload: {
+      filter: newFilter,
+    },
   };
 }

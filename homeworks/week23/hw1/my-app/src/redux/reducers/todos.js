@@ -1,4 +1,3 @@
-import { addTodo } from "../actions";
 import {
   ADD_TODO,
   DELETE_TODO,
@@ -7,14 +6,13 @@ import {
   TOGGLE_TODO,
 } from "../actionType";
 
-// function writeTodosIntoLocalStorage(todos) {
-//   window.localStorage.setItem("todos", JSON.stringify(todos));
-// }
+let currentId = 0;
 
 const initialState = () => {
   let todosData = window.localStorage.getItem("todos") || "";
   if (todosData && todosData !== "[]") {
     todosData = JSON.parse(todosData);
+    currentId = todosData[0].id + 1;
   } else {
     todosData = [];
   }
@@ -25,7 +23,14 @@ export default function todosReducer(state = initialState(), action) {
   switch (action.type) {
     case ADD_TODO: {
       const { content } = action.payload;
-      return [...state, addTodo(content)];
+      return [
+        {
+          id: ++currentId,
+          content,
+          isDone: false,
+        },
+        ...state,
+      ];
     }
 
     case DELETE_TODO: {
@@ -35,20 +40,16 @@ export default function todosReducer(state = initialState(), action) {
 
     case EDIT_TODO: {
       const { id, content } = action.payload;
-      return state.map((todo) => {
-        if (todo.id !== id) return todo;
-        return {
-          ...todo,
-          content: content,
-        };
-      });
+      return state.map((todo) =>
+        todo.id === id ? { ...todo, content: content } : todo
+      );
     }
 
     case TOGGLE_TODO: {
       const { id } = action.payload;
-      return state.map((todo) => {
-        return todo.id === id ? { ...todo, isDone: !todo.isDone } : todo;
-      });
+      return state.map((todo) =>
+        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
+      );
     }
 
     case DELETE_ALL: {

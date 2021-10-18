@@ -1,5 +1,5 @@
 import { SET_FILTER } from "../actionType";
-import FILTERSTYPE from "../../constants";
+import { FILTERSTYPE } from "../../constants";
 
 const initialState = FILTERSTYPE.ALL;
 
