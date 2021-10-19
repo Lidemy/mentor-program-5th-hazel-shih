@@ -43,7 +43,7 @@ function PostPage() {
             <PostInfo
               category={post[0].category ? post[0].category : "單純mur-mur"}
               author={post[0].userId}
-              createdAt={post[0].createdAt}
+              createdAt={new Date(post[0].createdAt).toLocaleString()}
             />
             <PostContentInPostPage>{post[0].body}</PostContentInPostPage>
           </PostWrapper>
