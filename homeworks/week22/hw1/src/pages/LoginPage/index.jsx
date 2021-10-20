@@ -90,8 +90,8 @@ export default function LoginPage() {
           return;
         }
         setUser(res.data);
-        history.push("/");
         setIsloading(false);
+        history.push("/");
       });
     });
   }

@@ -1,37 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Post from "../../components/Post";
 import SectionTitle from "../../components/SectionTitle";
 import { getPosts } from "../../WebAPI";
 import SectionWrapper from "../../components/SectionWrapper";
 import PagesContainer from "../../Pagination/PagesContainer";
 import Page from "../../Pagination/Page";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { nanoid } from "nanoid";
 import Loading from "../../components/Loading/loading";
 import Footer from "../../components/Footer";
-
-function getPreText(body) {
-  if (body.length <= 300) return body;
-  return body.slice(0, 300);
-}
+import { getPreText } from "../../utils";
+import { POST_PER_PAGE as perPage } from "../../constants";
 
 function HomePage() {
   const { pageNum } = useParams();
+  const { pathname } = useLocation();
   const [showPosts, setShowPosts] = useState([]);
-  const [posts, setPosts] = useState([]);
   const [isLoadingPosts, setIsLoadingPosts] = useState(true);
-  const perPage = 5;
+  const totalPostCount = useRef(0);
 
   useEffect(() => {
-    getPosts().then((posts) => setPosts(posts));
-  }, []);
-
-  useEffect(() => {
-    getPosts(perPage, pageNum).then((posts) => {
-      setShowPosts(posts);
-      setIsLoadingPosts(false);
-    });
+    getPosts(perPage, pageNum)
+      .then((res) => {
+        totalPostCount.current = res.headers.get("x-total-count");
+        return res.json();
+      })
+      .then((posts) => {
+        console.log(posts);
+        setShowPosts(posts);
+        setIsLoadingPosts(false);
+      });
   }, [pageNum]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>
@@ -57,7 +60,7 @@ function HomePage() {
               );
             })}
             <PagesContainer>
-              {new Array(Math.ceil(posts.length / perPage))
+              {new Array(Math.ceil(totalPostCount.current / perPage))
                 .fill(null)
                 .map((item, index) => (
                   <Link key={nanoid()} to={`/page/${index + 1}`}>

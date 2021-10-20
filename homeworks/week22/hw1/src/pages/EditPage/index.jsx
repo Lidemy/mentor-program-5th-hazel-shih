@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import SectionWrapper from "../../components/SectionWrapper";
-import { publishPost, getOnePost } from "../../WebAPI";
+import { editPost, getOnePost } from "../../WebAPI";
 import { useHistory, useParams } from "react-router";
 import Footer from "../../components/Footer";
-
+import { AuthContext, GetUserContext } from "../../context";
 const EditWrapper = styled(SectionWrapper)`
   padding: 80px 300px 150px 300px;
 `;
@@ -75,10 +75,19 @@ export default function EditPage() {
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const { id } = useParams();
+  const { isGettingUser } = useContext(GetUserContext);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    getOnePost(id).then((editPost) => {
-      setPost(editPost);
+    if (!isGettingUser && !user) {
+      alert("登入後才能使用編輯文章功能喔！");
+      history.push("/");
+    }
+  }, [history, isGettingUser, user]);
+
+  useEffect(() => {
+    getOnePost(id).then((previousPost) => {
+      setPost(previousPost[0]);
     });
   }, [id]);
 
@@ -91,14 +100,14 @@ export default function EditPage() {
       setIsLoading(false);
       return;
     }
-    publishPost(post.title, post.body).then((data) => {
+    editPost(id, post.title, post.body).then((data) => {
       if (data.ok === 0) {
         setErrMsg(`發生了一點錯誤：${data.message}`);
         setIsLoading(false);
         return;
       }
       setIsLoading(false);
-      history.push("/");
+      history.push("/list");
     });
   }
 
@@ -120,19 +129,15 @@ export default function EditPage() {
 
   return (
     <>
-      {post && (
+      {user && post && (
         <>
           <EditWrapper>
             <EditContainer>
-              <AlertMsg style={{ textAlign: "left" }}>
-                因為沒有處理編輯的
-                API，我只是做爽的，因此送出文章會是「再發布一篇新文章」喔！
-              </AlertMsg>
               <EditTitle>編輯文章</EditTitle>
               <EditForm>
                 <EditInputBlock>
                   <EditInput
-                    defaultValue={post[0].title}
+                    defaultValue={post.title}
                     onChange={handleChange}
                     name="title"
                     placeholder="請輸入文章標題"
@@ -140,7 +145,7 @@ export default function EditPage() {
                 </EditInputBlock>
                 <EditInputBlock>
                   <EditTextArea
-                    defaultValue={post[0].body}
+                    defaultValue={post.body}
                     onChange={handleChange}
                     name="content"
                     placeholder="請輸入文章內容"

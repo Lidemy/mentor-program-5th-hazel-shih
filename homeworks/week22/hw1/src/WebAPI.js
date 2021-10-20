@@ -1,12 +1,36 @@
 const BASE_URL = "https://student-json-api.lidemy.me";
 
 export const getPosts = (perPage, page) => {
-  return fetch(
-    `${BASE_URL}/posts?_sort=createdAt${perPage && `&_limit=${perPage}`}${
-      page && `&_page=${page}`
-    }
-    }&_order=desc`
-  ).then((res) => res.json());
+  let url = BASE_URL + "/posts?";
+  let query = {
+    _sort: "createdAt",
+    _order: "desc",
+    _limit: perPage,
+    _page: page,
+  };
+  let queryString = [];
+  for (let key in query) {
+    queryString.push(`${key}=${encodeURIComponent(query[key])}`);
+  }
+  url += queryString.join("&");
+  return fetch(url);
+};
+
+export const getMyPosts = (userId, perPage, page) => {
+  let url = BASE_URL + "/posts?";
+  let query = {
+    _sort: "createdAt",
+    userId,
+    _order: "desc",
+    _limit: perPage,
+    _page: page,
+  };
+  let queryString = [];
+  for (let key in query) {
+    queryString.push(`${key}=${encodeURIComponent(query[key])}`);
+  }
+  url += queryString.join("&");
+  return fetch(url);
 };
 
 export const getOnePost = (id) => {
@@ -64,10 +88,10 @@ export const publishPost = (title, body) => {
   }).then((res) => res.json());
 };
 
-export const editPost = (title, body) => {
+export const editPost = (id, title, body) => {
   const token = localStorage.getItem("token");
-  return fetch(`${BASE_URL}/posts`, {
-    method: "PUT",
+  return fetch(`${BASE_URL}/posts/${id}`, {
+    method: "PATCH",
     headers: {
       authorization: `Bearer ${token}`,
       "content-type": "application/json",
@@ -75,14 +99,7 @@ export const editPost = (title, body) => {
     body: JSON.stringify({
       title,
       body,
+      createdAt: Date.now(),
     }),
   }).then((res) => res.json());
-};
-
-export const getMyPosts = (userId, perPage, page) => {
-  return fetch(
-    `${BASE_URL}/posts?userId=${userId}&_sort=createdAt${
-      perPage && `&_limit=${perPage}`
-    }${page && `&_page=${page}`}&_order=desc`
-  ).then((res) => res.json());
 };
