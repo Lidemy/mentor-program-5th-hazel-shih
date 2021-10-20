@@ -26,7 +26,6 @@ function HomePage() {
         return res.json();
       })
       .then((posts) => {
-        console.log(posts);
         setShowPosts(posts);
         setIsLoadingPosts(false);
       });
